@@ -1,8 +1,18 @@
 # Omakase Ruby styling for Rails
 inherit_gem: { rubocop-rails-omakase: rubocop.yml }
 
+AllCops:
+  Exclude:
+    - 'config/**/*'  # Excludes all files and subdirectories under config/
+    - 'lib/tasks/**/*'  # Excludes all files and subdirectories under lib/tasks/
+    - 'Gemfile'  # Excludes the Gemfile
+
 # Overwrite or add rules to create your own house style
 #
 # # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
 # Layout/SpaceInsideArrayLiteralBrackets:
 #   Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+
