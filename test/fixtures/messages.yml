@@ -1,0 +1,40 @@
+# == Schema Information
+#
+# Table name: messages
+#
+#  id            :integer          not null, primary key
+#  chat_id       :integer          not null
+#  role          :string
+#  content       :text
+#  model_id      :string
+#  input_tokens  :integer
+#  output_tokens :integer
+#  tool_call_id  :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
+# Indexes
+#
+#  index_messages_on_chat_id       (chat_id)
+#  index_messages_on_tool_call_id  (tool_call_id)
+#
+
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  chat: one
+  role: <%= RubyLLM::Message::ROLES.sample %>
+  content: SomeText
+  model_id: MyString
+  input_tokens: 1
+  output_tokens: 1
+  tool_call: one
+
+two:
+  chat: two
+  role: <%= RubyLLM::Message::ROLES.sample %>
+  content: SomeText
+  model_id: MyString
+  input_tokens: 1
+  output_tokens: 1
+  tool_call: two
