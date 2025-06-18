@@ -19,7 +19,7 @@
 #  index_messages_on_tool_call_id  (tool_call_id)
 #
 
-require "test_helper"
+require 'test_helper'
 
 class MessageTest < ActiveSupport::TestCase
   test 'should validate presence of role' do

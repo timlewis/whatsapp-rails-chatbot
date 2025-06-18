@@ -16,7 +16,7 @@
 #  index_tool_calls_on_tool_call_id  (tool_call_id) UNIQUE
 #
 
-require "test_helper"
+require 'test_helper'
 
 class ToolCallTest < ActiveSupport::TestCase
   test 'should validate uniqueness of tool_call_id' do
