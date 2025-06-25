@@ -1,0 +1,21 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id              :integer          not null, primary key
+#  whatsapp_number :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#
+# Indexes
+#
+#  index_users_on_whatsapp_number  (whatsapp_number) UNIQUE
+#
+
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  whatsapp_number: <%= SecureRandom.uuid %>
+
+two:
+  whatsapp_number: <%= SecureRandom.uuid %>
