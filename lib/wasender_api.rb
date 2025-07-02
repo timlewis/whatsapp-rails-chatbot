@@ -257,4 +257,107 @@ module WasenderApi
       request.post('send-message', **payload)
     end
   end
+
+  class Groups < Base
+    def initialize(config = nil, session_id)
+      super(config)
+      @session_id = session_id
+      @request = Request.new(@config, WasenderApi.session_api_token(@session_id))
+    end
+
+    attr_reader :request, :session_id
+
+    # Get all groups the connected account is a member of
+    # https://wasenderapi.com/api-docs/groups/get-all-groups
+    def list
+      request.get('groups')
+    end
+
+    # Send a message to a group: use the Messages class to send messages to a group. but instead of a phone number, use the Group ID.
+    # Send a message directly to a WhatsApp group using its unique Group ID (e.g., `123456789-987654321@g.us`).
+    # Use the `/api/groups` endpoint to find the IDs of the groups you are in.
+    # The parameters are the same as sending a regular message, but the `to` field must contain the Group ID.
+
+    # Get metadata for a specific group
+    # https://wasenderapi.com/api-docs/groups/get-group-metadata
+    # group_jid: The JID (Jabber ID) of the group in the format 123456789-987654321@g.us.
+    def metadata(group_jid)
+      request.get("groups/#{group_jid}/metadata")
+    end
+
+    # Get participants for a specific group
+    # https://wasenderapi.com/api-docs/groups/get-group-participants
+    # group_jid: The JID (Jabber ID) of the group in the format 123456789-987654321@g.us.
+    def participants(group_jid)
+      request.get("groups/#{group_jid}/participants")
+    end
+
+    # Add participants to a group
+    # https://wasenderapi.com/api-docs/groups/add-group-participants
+    # participants: array of phone numbers (E.164 format)
+    def add_participants(group_jid, participants)
+      raise ArgumentError, 'participants must be an array' unless participants.is_a?(Array)
+      request.post("groups/#{group_jid}/participants/add", participants: participants)
+    end
+
+    # Remove participants from a group
+    # https://wasenderapi.com/api-docs/groups/remove-group-participants
+    # participants: array of phone numbers (E.164 format)
+    def remove_participants(group_jid, participants)
+      raise ArgumentError, 'participants must be an array' unless participants.is_a?(Array)
+      request.post("groups/#{group_jid}/participants/remove", participants: participants)
+    end
+
+    # Update group settings (subject, description, announce, restrict)
+    # https://wasenderapi.com/api-docs/groups/update-group-settings
+    # settings: hash with any of :subject(string), :description(string), :announce(bool), :restrict(bool)
+    def update_settings(group_jid, settings)
+      raise ArgumentError, 'settings must be a hash' unless settings.is_a?(Hash)
+      request.put("groups/#{group_jid}/settings", **settings)
+    end
+  end
+
+  class Contacts < Base
+    def initialize(config = nil, session_id)
+      super(config)
+      @session_id = session_id
+      @request = Request.new(@config, WasenderApi.session_api_token(@session_id))
+    end
+
+    attr_reader :request, :session_id
+
+    # Get all contacts synced with the WhatsApp session
+    # https://wasenderapi.com/api-docs/contacts/get-all-contacts
+    def list
+      request.get('contacts')
+    end
+
+    # Get detailed info for a specific contact
+    # https://wasenderapi.com/api-docs/contacts/get-contact-info
+    # contact_phone_number: The JID (Jabber ID) of the contact in E.164 format (international phone number)
+    def info(contact_phone_number)
+      request.get("contacts/#{contact_phone_number}")
+    end
+
+    # Get profile picture URL for a specific contact
+    # https://wasenderapi.com/api-docs/contacts/get-contact-profile-picture
+    # contact_phone_number: The JID (Jabber ID) of the contact in E.164 format (international phone number)
+    def picture(contact_phone_number)
+      request.get("contacts/#{contact_phone_number}/picture")
+    end
+
+    # Block a specific contact
+    # https://wasenderapi.com/api-docs/contacts/block-contact
+    # contact_phone_number: The JID (Jabber ID) of the contact in E.164 format (international phone number)
+    def block(contact_phone_number)
+      request.post("contacts/#{contact_phone_number}/block")
+    end
+
+    # Unblock a specific contact
+    # https://wasenderapi.com/api-docs/contacts/unblock-contact
+    # contact_phone_number: The JID (Jabber ID) of the contact in E.164 format (international phone number)
+    def unblock(contact_phone_number)
+      request.post("contacts/#{contact_phone_number}/unblock")
+    end
+  end
 end
