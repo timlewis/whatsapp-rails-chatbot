@@ -9,6 +9,9 @@ class WasenderApi::GroupsTest < ActiveSupport::TestCase
     @request = mock('request')
     @groups.instance_variable_set(:@request, @request)
   end
+  test 'Real WasenderApi responds to stubbed methods' do
+    assert_respond_to WasenderApi, :session_api_token
+  end
 
   test 'list calls request.get with correct path' do
     @request.expects(:get).with('groups').returns('ok')

@@ -15,6 +15,11 @@ class WasenderApiTest < ActiveSupport::TestCase
     WasenderApi.session_hash = nil
   end
 
+  test 'Real Session responds to stubbed methods' do
+    real = WasenderApi::Session.new
+    assert_respond_to real, :details
+  end
+
     test 'get_session_id returns session_id from session_id_hash if present' do
     WasenderApi.session_id_hash = { '12345' => 99 }
     assert_equal 99, WasenderApi.get_session_id('12345')

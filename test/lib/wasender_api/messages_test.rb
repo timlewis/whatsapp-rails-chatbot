@@ -10,6 +10,10 @@ class WasenderApi::MessagesTest < ActiveSupport::TestCase
     @messages.instance_variable_set(:@request, @request)
   end
 
+  test 'Real WasenderApi responds to stubbed methods' do
+    assert_respond_to WasenderApi, :session_api_token
+  end
+
   test 'send_text validates payload and calls request.post with correct params' do
     @request.expects(:post).with('send-message', to: '123', text: 'hi').returns('ok')
     assert_equal 'ok', @messages.send_text({ to: '123', text: 'hi' })
