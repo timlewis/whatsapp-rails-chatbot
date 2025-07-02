@@ -30,8 +30,9 @@ module WasenderApi
 
     response = WasenderApi::Session.new.details(session_id)
     if response.success?
-      self.session_hash = { session_id => [ response.body[:data][:api_key], response.body[:data][:webhook_secret] ] }
-      response.body[:data][:api_key]
+      self.session_hash ||= {}
+      self.session_hash[session_id] = [ response.data[:api_key], response.data[:webhook_secret] ]
+      response.data[:api_key]
     else
       raise "Failed to retrieve session API token: #{response.body[:message]}"
     end
@@ -42,8 +43,9 @@ module WasenderApi
 
     response = WasenderApi::Session.new.details(session_id)
     if response.success?
-      self.session_hash = { session_id => [ response.body[:data][:api_key], response.body[:data][:webhook_secret] ] }
-      response.body[:data][:webhook_secret]
+      self.session_hash ||= {}
+      self.session_hash[session_id] = [ response.data[:api_key], response.data[:webhook_secret] ]
+      response.data[:webhook_secret]
     else
       raise "Failed to retrieve session webhook secret: #{response.body[:message]}"
     end

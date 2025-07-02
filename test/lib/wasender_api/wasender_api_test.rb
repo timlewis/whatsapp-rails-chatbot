@@ -6,7 +6,11 @@ class WasenderApiTest < ActiveSupport::TestCase
     @session_id = 42
     @api_token = 'api_token_123'
     @webhook_secret = 'webhook_secret_abc'
-    @response = stub(success?: true, body: { data: { api_token: @api_token, webhook_secret: @webhook_secret, api_key: @api_token } })
+    @response = stub(
+      success?: true,
+      body: { data: { webhook_secret: @webhook_secret, api_key: @api_token } },
+      data: { webhook_secret: @webhook_secret, api_key: @api_token }
+    )
     WasenderApi::Session.any_instance.stubs(:details).with(@session_id).returns(@response)
     WasenderApi.session_hash = nil
   end
