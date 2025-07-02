@@ -7,15 +7,33 @@ module WasenderApi
 
   module_function
 
+  def get_session_id(phone_number)
+    return session_id_hash[phone_number] if session_id_hash && session_id_hash[phone_number]
+
+    response = WasenderApi::Session.new.list
+    if response.success?
+      session = response.data.detect { |s| s[:phone_number] == phone_number && s[:status] == 'connected' }
+      if session
+        self.session_id_hash ||= {}
+        self.session_id_hash[phone_number] = session[:id]
+        session[:id]
+      else
+        raise "No session found for phone number: #{phone_number}"
+      end
+    else
+      raise "Failed to retrieve sessions: #{response.body[:message]}"
+    end
+  end
+
   def session_api_token(session_id)
     return session_hash[session_id].first if session_hash && session_hash[session_id]
 
     response = WasenderApi::Session.new.details(session_id)
     if response.success?
-      self.session_hash = { session_id => [ response.body[:data][:api_token], response.body[:data][:webhook_secret] ] }
+      self.session_hash = { session_id => [ response.body[:data][:api_key], response.body[:data][:webhook_secret] ] }
       response.body[:data][:api_key]
     else
-      raise "Failed to retrieve session API token: #{response.body[:error]}"
+      raise "Failed to retrieve session API token: #{response.body[:message]}"
     end
   end
 
@@ -24,15 +42,16 @@ module WasenderApi
 
     response = WasenderApi::Session.new.details(session_id)
     if response.success?
-      self.session_hash = { session_id => [ response.body[:data][:api_token], response.body[:data][:webhook_secret] ] }
+      self.session_hash = { session_id => [ response.body[:data][:api_key], response.body[:data][:webhook_secret] ] }
       response.body[:data][:webhook_secret]
     else
-      raise "Failed to retrieve session webhook secret: #{response.body[:error]}"
+      raise "Failed to retrieve session webhook secret: #{response.body[:message]}"
     end
   end
 
   # session_hash contains a hash of session_id => [api_token, webhook_secret]
-  thread_mattr_accessor :session_hash, instance_accessor: false
+  # session_id_hash contains a hash of phone_number => session_id
+  thread_mattr_accessor :session_hash, :session_id_hash, instance_accessor: false
 
   class Connection
     class << self
@@ -95,6 +114,14 @@ module WasenderApi
 
     def failure?
       !success?
+    end
+
+    def data
+      return {} unless success?
+      data = body[:data]
+      return {} if data.blank?
+
+      data
     end
 
     def body

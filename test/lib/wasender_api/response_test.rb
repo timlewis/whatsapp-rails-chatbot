@@ -25,4 +25,20 @@ class WasenderApi::ResponseTest < ActiveSupport::TestCase
     blank_response = WasenderApi::Response.new(OpenStruct.new(status: 200, body: '', success?: true))
     assert_equal({}, blank_response.body)
   end
+
+  test 'data returns parsed body data' do
+    response_with_data = WasenderApi::Response.new(OpenStruct.new(status: 200, body: '{"data":{"foo":"bar"}}', success?: true))
+    assert_equal 'bar', response_with_data.data[:foo]
+    assert_equal 'bar', response_with_data.data['foo']
+  end
+
+  test 'data returns empty hash if response is not successful' do
+    unsuccessful_response = WasenderApi::Response.new(OpenStruct.new(status: 500, body: '{"error":"fail"}', success?: false))
+    assert_equal({}, unsuccessful_response.data)
+  end
+
+  test 'data returns empty hash if body is blank' do
+    blank_response = WasenderApi::Response.new(OpenStruct.new(status: 200, body: '', success?: true))
+    assert_equal({}, blank_response.data)
+  end
 end
