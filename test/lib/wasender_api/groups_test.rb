@@ -3,14 +3,20 @@ require 'wasender_api'
 
 class WasenderApi::GroupsTest < ActiveSupport::TestCase
   def setup
-    @config = WasenderApi::WasenderConfig.new(personal_access_token: 'token', base_url: 'http://example.com')
+    @phone_number = '555'
+    @config = WasenderApi::WasenderConfig.new(
+      personal_access_token: 'token',
+      base_url: 'https://api.example.com',
+      phone_number: @phone_number
+    )
     WasenderApi.stubs(:session_api_token).returns('token')
-    @groups = WasenderApi::Groups.new(@config, 1)
+    @groups = WasenderApi::Groups.new(@config)
     @request = mock('request')
     @groups.instance_variable_set(:@request, @request)
   end
   test 'Real WasenderApi responds to stubbed methods' do
     assert_respond_to WasenderApi, :session_api_token
+    assert_respond_to WasenderApi, :get_session_id
   end
 
   test 'list calls request.get with correct path' do

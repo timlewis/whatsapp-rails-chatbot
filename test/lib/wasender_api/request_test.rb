@@ -3,7 +3,11 @@ require 'wasender_api'
 
 class WasenderApi::RequestTest < ActiveSupport::TestCase
   def setup
-    @config = WasenderApi::WasenderConfig.new(personal_access_token: 'token', base_url: 'http://example.com')
+    @config = WasenderApi::WasenderConfig.new(
+      personal_access_token: 'token',
+      base_url: 'https://api.example.com',
+      phone_number: '555'
+    )
     @request = WasenderApi::Request.new(@config, 'token')
   end
 

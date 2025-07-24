@@ -3,15 +3,21 @@ require 'wasender_api'
 
 class WasenderApi::MessagesTest < ActiveSupport::TestCase
   def setup
-    @config = WasenderApi::WasenderConfig.new(personal_access_token: 'token', base_url: 'http://example.com')
+    @phone_number = '555'
+    @config = WasenderApi::WasenderConfig.new(
+      personal_access_token: 'token',
+      base_url: 'https://api.example.com',
+      phone_number: @phone_number
+    )
     WasenderApi.stubs(:session_api_token).returns('token')
-    @messages = WasenderApi::Messages.new(@config, 1)
+    @messages = WasenderApi::Messages.new(@config)
     @request = mock('request')
     @messages.instance_variable_set(:@request, @request)
   end
 
   test 'Real WasenderApi responds to stubbed methods' do
     assert_respond_to WasenderApi, :session_api_token
+    assert_respond_to WasenderApi, :get_session_id
   end
 
   test 'send_text validates payload and calls request.post with correct params' do

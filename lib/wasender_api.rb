@@ -1,8 +1,9 @@
 module WasenderApi
-  WasenderConfig = Struct.new(:personal_access_token, :base_url, keyword_init: true)
+  WasenderConfig = Struct.new(:personal_access_token, :base_url, :phone_number, keyword_init: true)
   DEFAULT_CONFIG = WasenderConfig.new(
     personal_access_token: ENV.fetch('WASENDER_PERSONAL_ACCESS_TOKEN'),
-    base_url: ENV.fetch('WASENDER_BASE_URL')
+    base_url: ENV.fetch('WASENDER_BASE_URL'),
+    phone_number: ENV.fetch('WASENDER_PHONE_NUMBER')
   ).freeze
 
   module_function
@@ -25,7 +26,9 @@ module WasenderApi
     end
   end
 
-  def session_api_token(session_id)
+  def session_api_token(config = nil)
+    config ||= DEFAULT_CONFIG
+    session_id = get_session_id(config.phone_number)
     return session_hash[session_id].first if session_hash && session_hash[session_id]
 
     response = WasenderApi::Session.new.details(session_id)
@@ -38,7 +41,9 @@ module WasenderApi
     end
   end
 
-  def webhook_secret(session_id)
+  def webhook_secret(config = nil)
+    config ||= DEFAULT_CONFIG
+    session_id = get_session_id(config.phone_number)
     return session_hash[session_id].last if session_hash && session_hash[session_id]
 
     response = WasenderApi::Session.new.details(session_id)
@@ -134,8 +139,7 @@ module WasenderApi
   end
 
   class Base
-    def initialize(*args)
-      config = args.first
+    def initialize(config = nil)
       @config = config || DEFAULT_CONFIG
     end
     attr_reader :config
@@ -210,18 +214,16 @@ module WasenderApi
   end
 
   class Messages < Base
-    def initialize(config = nil, session_id)
+    def initialize(config = nil)
       super
-      @session_id = session_id
-      @request = Request.new(@config, WasenderApi.session_api_token(@session_id))
+      @request = Request.new(@config, WasenderApi.session_api_token(@config))
     end
 
-    attr_reader :request, :session_id
+    attr_reader :request
 
     def send_text(payload)
       # https://wasenderapi.com/api-docs/messages/send-text-message
       # required: to: string (phone number in E.164 format), text: string
-      # optional: text: string for caption
       validate_payload(payload, required_keys: %i[to text])
       request.post('send-message', **payload)
     end
@@ -288,13 +290,12 @@ module WasenderApi
   end
 
   class Groups < Base
-    def initialize(config = nil, session_id)
+    def initialize(config = nil)
       super(config)
-      @session_id = session_id
-      @request = Request.new(@config, WasenderApi.session_api_token(@session_id))
+      @request = Request.new(@config, WasenderApi.session_api_token(@config))
     end
 
-    attr_reader :request, :session_id
+    attr_reader :request
 
     # Get all groups the connected account is a member of
     # https://wasenderapi.com/api-docs/groups/get-all-groups
@@ -347,13 +348,12 @@ module WasenderApi
   end
 
   class Contacts < Base
-    def initialize(config = nil, session_id)
-      super(config)
-      @session_id = session_id
-      @request = Request.new(@config, WasenderApi.session_api_token(@session_id))
+    def initialize(config = nil)
+      super
+      @request = Request.new(@config, WasenderApi.session_api_token(@config))
     end
 
-    attr_reader :request, :session_id
+    attr_reader :request
 
     # Get all contacts synced with the WhatsApp session
     # https://wasenderapi.com/api-docs/contacts/get-all-contacts
