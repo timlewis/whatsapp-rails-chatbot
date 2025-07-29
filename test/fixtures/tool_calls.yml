@@ -22,10 +22,10 @@ one:
   message: one
   tool_call_id: <%= SecureRandom.uuid %>
   name: MyString
-  arguments: MyString
+  arguments: {}
 
 two:
   message: two
   tool_call_id: <%= SecureRandom.uuid %>
   name: MyString
-  arguments: MyString
+  arguments: {}
