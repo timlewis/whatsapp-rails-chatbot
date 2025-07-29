@@ -69,3 +69,5 @@ group :test do
   gem "selenium-webdriver"
   gem "mocha"
 end
+
+gem "acidic_job", "= 1.0.0.rc3"

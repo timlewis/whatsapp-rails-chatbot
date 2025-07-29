@@ -10,7 +10,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_29_091715) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_29_155537) do
+  create_table "acidic_job_entries", force: :cascade do |t|
+    t.integer "execution_id", null: false
+    t.string "step", null: false
+    t.string "action", null: false
+    t.datetime "timestamp", null: false
+    t.json "data", default: "{}"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["execution_id", "step", "action"], name: "index_acidic_job_entries_on_execution_id_and_step_and_action"
+    t.index ["execution_id"], name: "index_acidic_job_entries_on_execution_id"
+  end
+
+  create_table "acidic_job_executions", force: :cascade do |t|
+    t.string "idempotency_key", null: false
+    t.json "serialized_job", default: "{}", null: false
+    t.datetime "last_run_at"
+    t.datetime "locked_at"
+    t.string "recover_to"
+    t.json "definition", default: "{}"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["idempotency_key"], name: "index_acidic_job_executions_on_idempotency_key", unique: true
+  end
+
+  create_table "acidic_job_values", force: :cascade do |t|
+    t.integer "execution_id", null: false
+    t.string "key", null: false
+    t.json "value", default: "{}", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["execution_id", "key"], name: "index_acidic_job_values_on_execution_id_and_key", unique: true
+    t.index ["execution_id"], name: "index_acidic_job_values_on_execution_id"
+  end
+
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -89,6 +123,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_29_091715) do
     t.index ["whatsapp_number"], name: "index_users_on_whatsapp_number", unique: true
   end
 
+  add_foreign_key "acidic_job_entries", "acidic_job_executions", column: "execution_id"
+  add_foreign_key "acidic_job_values", "acidic_job_executions", column: "execution_id"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "chats", "users"
