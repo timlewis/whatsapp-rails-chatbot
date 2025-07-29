@@ -49,4 +49,14 @@ class PersonaTest < ActiveSupport::TestCase
     assert_not persona2.valid?
     assert_includes persona2.errors[:config_default], 'has already been taken'
   end
+
+  test 'default scope returns only personas with config_default true' do
+    # Set one persona as default
+    persona = personas(:one)
+    persona.update!(config_default: true)
+    # Ensure the scope returns only the default persona
+    defaults = Persona.default
+    assert_includes defaults, persona
+    assert defaults.all? { |p| p.config_default }, 'All returned personas should have config_default true'
+  end
 end

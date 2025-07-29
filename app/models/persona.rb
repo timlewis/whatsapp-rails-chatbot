@@ -22,4 +22,6 @@ class Persona < ApplicationRecord
 
   # Ensure that only one persona can be set as the default
   validates :config_default, uniqueness: { conditions: -> { where(config_default: true) } }
+
+  scope :default, -> { where(config_default: true) }
 end
