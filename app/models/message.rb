@@ -25,6 +25,6 @@ class Message < ApplicationRecord
   validates :role, presence: true
 
   belongs_to :chat
-  belongs_to :tool_call, optional: true
+  has_many :tool_calls
   has_many_attached :attachments
 end
