@@ -56,6 +56,25 @@ module WasenderApi
     end
   end
 
+  # Split a long message into smaller chunks for better WhatsApp readability.
+  def split_message(text, max_lines: 3, max_chars_per_line: 100)
+    text = text.to_s
+    return [ '' ] if text.empty?
+
+    lines = text.split("\n").flat_map do |paragraph|
+      if paragraph.length > max_chars_per_line
+        # .{1,#{max_chars_per_line}}: Matches between 1 and max_chars_per_line of any character.
+        # (?:\s+|$): Non-capturing group that matches either:
+        # \s+ — one or more whitespace characters (space, tab, newline, etc) or $ — the end of the string
+        paragraph.scan(/.{1,#{max_chars_per_line}}(?:\s+|$)/).map(&:strip)
+      else
+        paragraph
+      end
+    end
+
+    lines.each_slice(max_lines).map { |chunk| chunk.join("\n") }
+  end
+
   # session_hash contains a hash of session_id => [api_token, webhook_secret]
   # session_id_hash contains a hash of phone_number => session_id
   thread_mattr_accessor :session_hash, :session_id_hash, instance_accessor: false

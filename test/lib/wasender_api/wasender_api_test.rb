@@ -16,6 +16,29 @@ class WasenderApiTest < ActiveSupport::TestCase
     WasenderApi.session_hash = nil
   end
 
+  test 'split_message splits by newlines and max_lines' do
+    text = "line1\nline2\nline3\nline4"
+    chunks = WasenderApi.split_message(text, max_lines: 2, max_chars_per_line: 100)
+    assert_equal [ "line1\nline2", "line3\nline4" ], chunks
+  end
+
+  test 'split_message splits long paragraphs by max_chars_per_line' do
+    text = 'This is a very long paragraph that should be split into multiple lines for better readability on WhatsApp.'
+    chunks = WasenderApi.split_message(text, max_lines: 2, max_chars_per_line: 30)
+    # Each chunk should have at most 2 lines, each line at most 30 chars
+    assert chunks.all? { |chunk| chunk.split("\n").size <= 2 }
+    assert chunks.all? { |chunk| chunk.split("\n").all? { |line| line.length <= 30 } }
+    assert chunks.join("\n").include?('readability on WhatsApp.')
+  end
+
+  test 'split_message handles empty string' do
+    assert_equal [ '' ], WasenderApi.split_message('')
+  end
+
+  test 'split_message handles single short line' do
+    assert_equal [ 'hello' ], WasenderApi.split_message('hello')
+  end
+
   test 'get_session_id returns session_id from cache if present' do
     WasenderApi.session_id_hash = { @phone_number => @session_id }
     assert_equal @session_id, WasenderApi.get_session_id(@phone_number)
