@@ -17,5 +17,13 @@ class Chat < ApplicationRecord
   acts_as_chat # ruby-llm helper
   belongs_to :user
 
+  before_validation :set_default_model_id
+
   validates :model_id, presence: true, inclusion: { in: AVAILABLE_MODEL_IDS }
+
+  private
+
+  def set_default_model_id
+    self.model_id ||= DEFAULT_LLM_MODEL
+  end
 end

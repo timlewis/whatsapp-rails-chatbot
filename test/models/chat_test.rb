@@ -16,13 +16,6 @@
 require 'test_helper'
 
 class ChatTest < ActiveSupport::TestCase
-  test 'should validate presence of model_id' do
-    chat = chats(:one)
-    chat.model_id = nil
-    assert_not chat.valid?
-    assert_includes chat.errors[:model_id], "can't be blank"
-  end
-
   test 'should validate inclusion of model_id in AVAILABLE_MODEL_IDS' do
     chat = chats(:one)
     chat.model_id = 'invalid_model'
@@ -35,5 +28,12 @@ class ChatTest < ActiveSupport::TestCase
     chat.model_id = AVAILABLE_MODEL_IDS.sample
     assert chat.valid?
     assert chat.save
+  end
+
+  test 'should default model_id to DEFAULT_LLM_MODEL if not provided' do
+    user = User.first || User.create!(whatsapp_number: '1234567890')
+    chat = Chat.new(user: user)
+    chat.valid?
+    assert_equal DEFAULT_LLM_MODEL, chat.model_id
   end
 end
