@@ -6,9 +6,9 @@
 #  message_id   :integer          not null
 #  tool_call_id :string           not null
 #  name         :string           not null
-#  arguments    :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  arguments    :json             default("{}"), not null
 #
 # Indexes
 #

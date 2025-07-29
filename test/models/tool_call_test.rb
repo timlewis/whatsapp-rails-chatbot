@@ -6,9 +6,9 @@
 #  message_id   :integer          not null
 #  tool_call_id :string           not null
 #  name         :string           not null
-#  arguments    :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  arguments    :json             default("{}"), not null
 #
 # Indexes
 #
@@ -24,5 +24,18 @@ class ToolCallTest < ActiveSupport::TestCase
     tool_call.tool_call_id = tool_calls(:two).tool_call_id
     assert_not tool_call.valid?
     assert_includes tool_call.errors[:tool_call_id], 'has already been taken'
+  end
+
+  test 'should not allow arguments to be nil' do
+    tool_call = tool_calls(:one)
+    tool_call.arguments = nil
+    assert_not tool_call.valid?
+    assert_includes tool_call.errors[:arguments], 'must be a hash'
+  end
+
+  test 'arguments are allowed to be empty hash' do
+    tool_call = tool_calls(:one)
+    tool_call.arguments = {}
+    assert tool_call.valid?
   end
 end
