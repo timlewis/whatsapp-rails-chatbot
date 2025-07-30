@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(bundle install:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(bin/rails:*)",
+      "Bash(mkdir:*)",
+      "Bash(bin/rubocop:*)",
+      "WebFetch(domain:wasenderapi.com)"
+    ],
+    "deny": []
+  }
+}
