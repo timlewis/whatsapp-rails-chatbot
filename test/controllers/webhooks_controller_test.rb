@@ -8,7 +8,7 @@ class WebhooksControllerTest < ActionDispatch::IntegrationTest
       'X-Webhook-Signature' => @webhook_secret
     }
     @payload = {
-      event: 'messages.upsert',
+      event: 'messages.received',
       timestamp: Time.now.to_i,
       data: {
         key: {
@@ -25,6 +25,29 @@ class WebhooksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'accepts valid messages.upsert webhook' do
+    post '/webhook', params: @payload, headers: @headers
+    assert_response :success
+    assert_equal true, JSON.parse(@response.body)['received']
+  end
+
+  test 'calls ProcessWebhook with correct parameters' do
+    ProcessWebhook.expects(:run).with do |params|
+      params[:event] == 'messages.received' &&
+      params[:data]['key']['id'] == 'message-id-123' &&
+      params[:data]['key']['fromMe'] == false &&
+      params[:data]['key']['remoteJid'] == '+1234567890' &&
+      params[:data]['message']['conversation'] == 'Hello, I have a question'
+    end.returns(stub(valid?: true, result: { user: stub(whatsapp_number: '+1234567890', id: 1) }))
+
+    post '/webhook', params: @payload, headers: @headers
+    assert_response :success
+  end
+
+  test 'handles ProcessWebhook validation errors gracefully' do
+    ProcessWebhook.expects(:run).returns(
+      stub(valid?: false, errors: stub(full_messages: [ 'Event is not included in the list' ]))
+    )
+
     post '/webhook', params: @payload, headers: @headers
     assert_response :success
     assert_equal true, JSON.parse(@response.body)['received']

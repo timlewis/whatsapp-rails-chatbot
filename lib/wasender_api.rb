@@ -6,6 +6,27 @@ module WasenderApi
     phone_number: ENV.fetch('WASENDER_PHONE_NUMBER')
   ).freeze
 
+  WEBHOOK_EVENTS = %w[
+    contact.update
+    contact.upsert
+    group.participants.update
+    group.update
+    chat.update
+    message.sent
+    group.upsert
+    chat.upsert
+    chat.delete
+    session.status
+    qr.code.updated
+    messages.upsert
+    message.received
+    message.status.update
+    message.deleted
+    message.receipt.update
+    message.reaction
+    poll.results
+  ].freeze
+
   module_function
 
   def get_session_id(phone_number)

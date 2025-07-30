@@ -12,11 +12,13 @@ class WebhooksController < ApplicationController
     end
 
     payload = webhook_params
-    event = payload['event']
+        event = payload['event']
 
     case event
-    when 'messages.upsert'
-      handle_message_upsert(payload['data'])
+    when 'messages.received'
+      handle_message_received(payload['data'])
+    else
+      Rails.logger.warn("Unhandled webhook event: #{event}")
     end
 
     render json: { received: true }, status: :ok
@@ -34,8 +36,17 @@ class WebhooksController < ApplicationController
     signature.present? && webhook_secret.present? && ActiveSupport::SecurityUtils.secure_compare(signature, webhook_secret)
   end
 
-  def handle_message_upsert(data)
-    Rails.logger.info("New message received: #{data['key']['id']}")
-    # Add message processing logic here
+  def handle_message_received(data)
+    interaction = ProcessWebhook.run(
+      event: 'messages.received',
+      data: data
+    )
+
+    if interaction.valid?
+      user = interaction.result[:user]
+      Rails.logger.info("Processed webhook event 'messages.received' for user #{user.id}")
+    else
+      Rails.logger.error("Failed to process webhook: #{interaction.errors.full_messages}")
+    end
   end
 end
