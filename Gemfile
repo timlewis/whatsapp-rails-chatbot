@@ -40,6 +40,9 @@ gem "thruster", require: false
 # ruby ai to communicate with llm models
 gem "ruby_llm"
 
+# Service objects with validation
+gem "active_interaction"
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
