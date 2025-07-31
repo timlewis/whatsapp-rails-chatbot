@@ -78,6 +78,9 @@ jobs:
       - name: Run tests
         env:
           RAILS_ENV: test
+          WASENDER_PERSONAL_ACCESS_TOKEN: test_token
+          WASENDER_BASE_URL: https://test.example.com
+          WASENDER_PHONE_NUMBER: +1234567890
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare test test:system
 
