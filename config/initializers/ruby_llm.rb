@@ -1,6 +1,8 @@
 require "ruby_llm"
 
-RubyLLM.models.refresh!
+unless Rails.env.test?
+  RubyLLM.models.refresh!
+end
 AVAILABLE_MODEL_IDS = RubyLLM.models.all.map(&:id).freeze
 DEFAULT_LLM_MODEL = AVAILABLE_MODEL_IDS.detect { |id| id == 'gemini-2.0-flash' } || 'gpt-4.1-nano'
 
