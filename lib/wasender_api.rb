@@ -7,23 +7,23 @@ module WasenderApi
   ).freeze
 
   WEBHOOK_EVENTS = %w[
-    contact.update
-    contact.upsert
-    group.participants.update
-    group.update
-    chat.update
+    contacts.update
+    contacts.upsert
+    group-participants.update
+    groups.update
+    chats.update
     message.sent
-    group.upsert
-    chat.upsert
-    chat.delete
+    groups.upsert
+    chats.upsert
+    chats.delete
     session.status
-    qr.code.updated
+    qrcode.updated
     messages.upsert
-    message.received
-    message.status.update
-    message.deleted
-    message.receipt.update
-    message.reaction
+    messages.received
+    messages.status.update
+    messages.deleted
+    messages.receipt.update
+    messages.reaction
     poll.results
   ].freeze
 
@@ -82,18 +82,41 @@ module WasenderApi
     text = text.to_s
     return [ '' ] if text.empty?
 
-    lines = text.split("\n").flat_map do |paragraph|
+    # Split by newlines (including escaped \n from LLM responses)
+    lines = text.split(/\\n|\n/).flat_map do |paragraph|
       if paragraph.length > max_chars_per_line
-        # .{1,#{max_chars_per_line}}: Matches between 1 and max_chars_per_line of any character.
-        # (?:\s+|$): Non-capturing group that matches either:
-        # \s+ — one or more whitespace characters (space, tab, newline, etc) or $ — the end of the string
-        paragraph.scan(/.{1,#{max_chars_per_line}}(?:\s+|$)/).map(&:strip)
+        # Split long paragraphs by words, respecting word boundaries
+        split_paragraph_by_words(paragraph, max_chars_per_line)
       else
         paragraph
       end
     end
 
-    lines.each_slice(max_lines).map { |chunk| chunk.join("\n") }
+    # Group lines into chunks of max_lines each
+    lines.each_slice(max_lines).map { |chunk| chunk.join("\n") }.reject(&:blank?)
+  end
+
+  def split_paragraph_by_words(paragraph, max_chars_per_line)
+    words = paragraph.split
+    lines = []
+    current_line = []
+
+    words.each do |word|
+      # Check if adding this word would exceed the line limit
+      test_line_length = current_line.join(' ').length + word.length + (current_line.empty? ? 0 : 1)
+
+      if test_line_length <= max_chars_per_line
+        current_line << word
+      else
+        # Finish current line and start a new one
+        lines << current_line.join(' ') if current_line.any?
+        current_line = [ word ]
+      end
+    end
+
+    # Don't forget the last line
+    lines << current_line.join(' ') if current_line.any?
+    lines
   end
 
   # session_hash contains a hash of session_id => [api_token, webhook_secret]

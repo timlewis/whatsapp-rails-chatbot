@@ -18,13 +18,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  description: MyString
-  base_prompt: MyText
-  config_default: false
+  name: Test Assistant
+  description: A helpful test assistant
+  base_prompt: You are a helpful assistant for testing purposes.
+  config_default: true
 
 two:
-  name: MyString
-  description: MyString
-  base_prompt: MyText
+  name: Secondary Assistant
+  description: Another test assistant
+  base_prompt: You are another helpful assistant.
   config_default: false
