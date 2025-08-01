@@ -118,31 +118,21 @@ class ProcessWebhook < ActiveInteraction::Base
     message = data[:message]
     return nil unless message.present?
 
-    # Check for each media message type
-    return 'image' if message[:imageMessage].present? && has_media_content?(message[:imageMessage])
-    return 'video' if message[:videoMessage].present? && has_media_content?(message[:videoMessage])
-    return 'audio' if message[:audioMessage].present? && has_media_content?(message[:audioMessage])
-    return 'document' if message[:documentMessage].present? && has_media_content?(message[:documentMessage])
-    return 'sticker' if message[:stickerMessage].present? && has_media_content?(message[:stickerMessage])
-
-    nil
+    if is_non_empty_media_type?(message, :imageMessage)
+      'image'
+    elsif is_non_empty_media_type?(message, :videoMessage)
+      'video'
+    elsif is_non_empty_media_type?(message, :audioMessage)
+      'audio'
+    elsif is_non_empty_media_type?(message, :documentMessage)
+      'document'
+    elsif is_non_empty_media_type?(message, :stickerMessage)
+      'sticker'
+    end
   end
 
   def send_media_response(phone_number, media_type)
-    response_text = case media_type
-    when 'image'
-      'Thank you for sending us this image, unfortunately we can only respond to Text messages at the moment'
-    when 'video'
-      'Thank you for sending us this video, unfortunately we can only respond to Text messages at the moment'
-    when 'audio'
-      'Thank you for sending us this audio, unfortunately we can only respond to Text messages at the moment'
-    when 'document'
-      'Thank you for sending us this document, unfortunately we can only respond to Text messages at the moment'
-    when 'sticker'
-      'Thank you for sending us this sticker, unfortunately we can only respond to Text messages at the moment'
-    else
-      'Thank you for your message, unfortunately we can only respond to Text messages at the moment'
-    end
+    response_text = "Thank you for #{media_type ? "sending us this #{media_type}" : "your message"}, unfortunately we can only respond to Text messages at the moment"
 
     begin
       messages_api = WasenderApi::Messages.new
@@ -160,19 +150,15 @@ class ProcessWebhook < ActiveInteraction::Base
     message = data[:message]
     return nil unless message.present?
 
-    # Only handle text messages now, media messages are handled separately
-    # Check for conversation field (simple text message)
     if message[:conversation].present?
-      return message[:conversation]
+      message[:conversation]
+    elsif message[:extendedTextMessage].present? && message[:extendedTextMessage][:text].present?
+      message[:extendedTextMessage][:text]
     end
+  end
 
-    # Check for extendedTextMessage structure
-    if message[:extendedTextMessage].present? && message[:extendedTextMessage][:text].present?
-      return message[:extendedTextMessage][:text]
-    end
-
-    # No text message content found
-    nil
+  def is_non_empty_media_type?(message_hash, media_type)
+    message_hash[media_type].present? && has_media_content?(message_hash[media_type])
   end
 
   def has_media_content?(media_hash)
