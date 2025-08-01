@@ -73,4 +73,4 @@ group :test do
   gem "mocha"
 end
 
-gem "acidic_job", "= 1.0.0.rc3"
+gem "acidic_job", "1.0.0.rc6"

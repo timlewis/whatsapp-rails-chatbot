@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    acidic_job (1.0.0.rc3)
+    acidic_job (1.0.0.rc6)
       activejob (>= 7.1)
       activerecord (>= 7.1)
       activesupport (>= 7.1)
@@ -154,7 +154,7 @@ GEM
     jbuilder (2.13.0)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
-    json (2.12.2)
+    json (2.13.2)
     kamal (2.7.0)
       activesupport (>= 7.0)
       base64 (~> 0.2)
@@ -411,7 +411,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
-  acidic_job (= 1.0.0.rc3)
+  acidic_job (= 1.0.0.rc6)
   active_interaction
   annotate
   bootsnap
