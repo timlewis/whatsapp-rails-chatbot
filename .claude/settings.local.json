@@ -10,8 +10,15 @@
       "WebFetch(domain:wasenderapi.com)",
       "WebFetch(domain:rubyllm.com)",
       "Bash(ruby test:*)",
-      "Bash(bin/brakeman:*)"
+      "Bash(bin/brakeman:*)",
+      "Bash(git rebase:*)",
+      "Bash(git stash:*)",
+      "WebFetch(domain:docs.anthropic.com)"
     ],
-    "deny": []
+    "deny": [
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "Bash(rm -rf:*)"
+    ]
   }
 }
