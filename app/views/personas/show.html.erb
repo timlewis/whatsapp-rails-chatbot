@@ -1,4 +1,113 @@
-<div>
-  <h1 class="font-bold text-4xl">Personas#show</h1>
-  <p>Find me in app/views/personas/show.html.erb</p>
+<div class="space-y-6">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-1 text-gray-900"><%= @persona.name %></h1>
+      <p class="text-3 text-gray-600 mt-2">
+        <% if @persona.config_default %>
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mr-2">
+            Default Persona
+          </span>
+        <% end %>
+        Created <%= @persona.created_at.strftime("%B %d, %Y") %>
+      </p>
+    </div>
+    
+    <div class="flex space-x-3">
+      <%= link_to "Edit", edit_persona_path(@persona), class: "btn btn-secondary" %>
+      <%= link_to "Back to Personas", personas_path, class: "btn btn-secondary" %>
+      <%= link_to "Delete", persona_path(@persona), 
+          method: :delete, 
+          class: "btn btn-destructive",
+          data: { 
+            confirm: "Are you sure you want to delete '#{@persona.name}'? This action cannot be undone." 
+          } %>
+    </div>
+  </div>
+
+  <!-- Persona Details -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Main Information -->
+    <div class="lg:col-span-2">
+      <div class="card">
+        <h2 class="text-2 text-gray-900 mb-4">Description</h2>
+        <p class="text-3 text-gray-700 mb-6">
+          <%= @persona.description %>
+        </p>
+
+        <h2 class="text-2 text-gray-900 mb-4">Base Prompt</h2>
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+          <pre class="text-3 text-gray-800 whitespace-pre-wrap font-mono"><%= @persona.base_prompt %></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar Information -->
+    <div class="space-y-6">
+      <!-- Status Card -->
+      <div class="card">
+        <h3 class="text-2 text-gray-900 mb-4">Status</h3>
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-3 text-gray-600">Default Persona</span>
+            <% if @persona.config_default %>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                Yes
+              </span>
+            <% else %>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                No
+              </span>
+            <% end %>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <span class="text-3 text-gray-600">Created</span>
+            <span class="text-3 text-gray-900">
+              <%= @persona.created_at.strftime("%b %d, %Y") %>
+            </span>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <span class="text-3 text-gray-600">Last Updated</span>
+            <span class="text-3 text-gray-900">
+              <%= @persona.updated_at.strftime("%b %d, %Y") %>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card">
+        <h3 class="text-2 text-gray-900 mb-4">Quick Actions</h3>
+        <div class="space-y-2">
+          <% unless @persona.config_default %>
+            <%= link_to persona_path(@persona), method: :patch, 
+                params: { persona: { config_default: true } },
+                class: "btn btn-primary w-full justify-start",
+                data: { confirm: "This will remove the default status from the current default persona. Continue?" } do %>
+              <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              Set as Default
+            <% end %>
+          <% end %>
+          
+          <%= link_to edit_persona_path(@persona), class: "btn btn-secondary w-full justify-start" do %>
+            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+            </svg>
+            Edit Persona
+          <% end %>
+
+          <%= link_to personas_path, class: "btn btn-secondary w-full justify-start" do %>
+            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
+            </svg>
+            Back to List
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,4 +1,10 @@
-<div>
-  <h1 class="font-bold text-4xl">Personas#new</h1>
-  <p>Find me in app/views/personas/new.html.erb</p>
+<div class="space-y-6">
+  <!-- Page Header -->
+  <div>
+    <h1 class="text-1 text-gray-900">Create New Persona</h1>
+    <p class="text-3 text-gray-600 mt-2">Define a new AI personality for your chatbot</p>
+  </div>
+
+  <!-- Form -->
+  <%= render "form", persona: @persona %>
 </div>
