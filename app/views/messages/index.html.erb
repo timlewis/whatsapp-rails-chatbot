@@ -1,4 +1,234 @@
-<div>
-  <h1 class="font-bold text-4xl">Messages#index</h1>
-  <p>Find me in app/views/messages/index.html.erb</p>
+<div class="space-y-6">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-1 text-gray-900">Messages</h1>
+      <p class="text-3 text-gray-600 mt-2">Browse all chat messages and AI interactions</p>
+    </div>
+    <% if params[:chat_id].present? %>
+      <div class="flex items-center space-x-2">
+        <%= link_to "← Back to All Messages", messages_path, class: "btn btn-secondary" %>
+        <%= link_to "View Chat", chat_path(params[:chat_id]), class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+    <div class="card">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </div>
+        <div class="ml-4">
+          <p class="text-4 font-medium text-gray-600">Total Messages</p>
+          <p class="text-2 font-semibold text-gray-900"><%= @stats[:total_messages] %></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="ml-4">
+          <p class="text-4 font-medium text-gray-600">User Messages</p>
+          <p class="text-2 font-semibold text-gray-900"><%= @stats[:user_messages] %></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
+              <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="ml-4">
+          <p class="text-4 font-medium text-gray-600">Assistant Messages</p>
+          <p class="text-2 font-semibold text-gray-900"><%= @stats[:assistant_messages] %></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </div>
+        <div class="ml-4">
+          <p class="text-4 font-medium text-gray-600">System Messages</p>
+          <p class="text-2 font-semibold text-gray-900"><%= @stats[:system_messages] %></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <div class="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="ml-4">
+          <p class="text-4 font-medium text-gray-600">Total Tokens</p>
+          <p class="text-2 font-semibold text-gray-900"><%= number_with_delimiter(@stats[:total_tokens]) %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Messages Table -->
+  <div class="card">
+    <% if @messages.any? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Message
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Role
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Chat & User
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Tokens
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Tools
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Created
+              </th>
+              <th scope="col" class="relative px-6 py-3">
+                <span class="sr-only">Actions</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <% @messages.each do |message| %>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4">
+                  <div class="flex items-start">
+                    <div class="flex-shrink-0 h-8 w-8 mt-1">
+                      <% case message.role %>
+                      <% when 'user' %>
+                        <div class="h-8 w-8 bg-green-100 rounded-full flex items-center justify-center">
+                          <svg class="h-4 w-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+                          </svg>
+                        </div>
+                      <% when 'assistant' %>
+                        <div class="h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center">
+                          <svg class="h-4 w-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
+                            <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/>
+                          </svg>
+                        </div>
+                      <% when 'system' %>
+                        <div class="h-8 w-8 bg-orange-100 rounded-full flex items-center justify-center">
+                          <svg class="h-4 w-4 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                          </svg>
+                        </div>
+                      <% else %>
+                        <div class="h-8 w-8 bg-gray-100 rounded-full flex items-center justify-center">
+                          <svg class="h-4 w-4 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd"/>
+                          </svg>
+                        </div>
+                      <% end %>
+                    </div>
+                    <div class="ml-4 flex-1">
+                      <div class="text-3 text-gray-900 max-w-md">
+                        <%= truncate(message.content, length: 150) %>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                    <%= case message.role
+                        when 'user' then 'bg-green-100 text-green-800'
+                        when 'assistant' then 'bg-blue-100 text-blue-800'  
+                        when 'system' then 'bg-orange-100 text-orange-800'
+                        else 'bg-gray-100 text-gray-800'
+                        end %>">
+                    <%= message.role&.capitalize %>
+                  </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-3 text-gray-900">
+                    <%= link_to "Chat ##{message.chat.id}", chat_path(message.chat), class: "text-blue-600 hover:text-blue-900 font-medium" %>
+                  </div>
+                  <div class="text-4 text-gray-500">
+                    <%= message.chat.user&.whatsapp_number || "Unknown User" %>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-3 text-gray-900">
+                  <div class="space-y-1">
+                    <% if message.input_tokens.present? && message.input_tokens > 0 %>
+                      <div class="text-4 text-gray-600">In: <%= number_with_delimiter(message.input_tokens) %></div>
+                    <% end %>
+                    <% if message.output_tokens.present? && message.output_tokens > 0 %>
+                      <div class="text-4 text-gray-600">Out: <%= number_with_delimiter(message.output_tokens) %></div>
+                    <% end %>
+                    <% if message.input_tokens.blank? && message.output_tokens.blank? %>
+                      <span class="text-gray-400">-</span>
+                    <% end %>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-3 text-gray-900">
+                  <% if message.tool_calls.any? %>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                      <%= pluralize(message.tool_calls.count, 'tool') %>
+                    </span>
+                  <% else %>
+                    <span class="text-gray-400">-</span>
+                  <% end %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-3 text-gray-500">
+                  <%= time_ago_in_words(message.created_at) %> ago
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-3 font-medium">
+                  <%= link_to "View Details", message_path(message), class: "text-blue-600 hover:text-blue-900" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <!-- Empty State -->
+      <div class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+        </svg>
+        <h3 class="text-2 text-gray-900 mt-4">No messages yet</h3>
+        <p class="text-3 text-gray-500 mt-2">Messages will appear here when conversations start happening.</p>
+      </div>
+    <% end %>
+  </div>
 </div>

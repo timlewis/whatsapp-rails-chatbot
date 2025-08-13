@@ -1,4 +1,198 @@
-<div>
-  <h1 class="font-bold text-4xl">Messages#show</h1>
-  <p>Find me in app/views/messages/show.html.erb</p>
+<div class="space-y-6">
+  <!-- Navigation -->
+  <div class="flex items-center space-x-2 text-3 text-gray-500">
+    <%= link_to "← Back to Messages", messages_path, class: "text-blue-600 hover:text-blue-900" %>
+    <span>/</span>
+    <%= link_to "Chat ##{@message.chat.id}", chat_path(@message.chat), class: "text-blue-600 hover:text-blue-900" %>
+    <span>/</span>
+    <span class="text-gray-900">Message Details</span>
+  </div>
+
+  <!-- Message Header -->
+  <div class="card">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-4">
+        <div class="flex-shrink-0">
+          <% case @message.role %>
+          <% when 'user' %>
+            <div class="h-12 w-12 bg-green-100 rounded-full flex items-center justify-center">
+              <svg class="h-6 w-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+              </svg>
+            </div>
+          <% when 'assistant' %>
+            <div class="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center">
+              <svg class="h-6 w-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
+                <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/>
+              </svg>
+            </div>
+          <% when 'system' %>
+            <div class="h-12 w-12 bg-orange-100 rounded-full flex items-center justify-center">
+              <svg class="h-6 w-6 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+          <% else %>
+            <div class="h-12 w-12 bg-gray-100 rounded-full flex items-center justify-center">
+              <svg class="h-6 w-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+          <% end %>
+        </div>
+        <div>
+          <h1 class="text-1 text-gray-900">Message Details</h1>
+          <div class="flex items-center space-x-4 text-3 text-gray-600 mt-2">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+              <%= case @message.role
+                  when 'user' then 'bg-green-100 text-green-800'
+                  when 'assistant' then 'bg-blue-100 text-blue-800'  
+                  when 'system' then 'bg-orange-100 text-orange-800'
+                  else 'bg-gray-100 text-gray-800'
+                  end %>">
+              <%= @message.role&.capitalize %>
+            </span>
+            <span>Created <%= time_ago_in_words(@message.created_at) %> ago</span>
+            <% if @message.tool_calls.any? %>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                <%= pluralize(@message.tool_calls.count, 'tool call') %>
+              </span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Message Content -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Main Content -->
+    <div class="lg:col-span-2">
+      <div class="card">
+        <h2 class="text-2 font-semibold text-gray-900 mb-4">Message Content</h2>
+        <div class="prose max-w-none">
+          <div class="bg-gray-50 rounded-lg p-4 border">
+            <pre class="whitespace-pre-wrap text-3 text-gray-900 font-mono"><%= @message.content %></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tool Calls -->
+      <% if @tool_calls.any? %>
+        <div class="card mt-6">
+          <h2 class="text-2 font-semibold text-gray-900 mb-4">Tool Calls</h2>
+          <div class="space-y-4">
+            <% @tool_calls.each_with_index do |tool_call, index| %>
+              <div class="border border-gray-200 rounded-lg p-4">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="flex items-center space-x-3">
+                    <div class="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
+                      <span class="text-xs font-medium text-purple-600"><%= index + 1 %></span>
+                    </div>
+                    <h3 class="text-3 font-semibold text-gray-900"><%= tool_call.name %></h3>
+                    <span class="text-4 text-gray-500">ID: <%= tool_call.tool_call_id %></span>
+                  </div>
+                  <%= link_to "View Details", tool_call_path(tool_call), class: "text-blue-600 hover:text-blue-900 text-3" %>
+                </div>
+                
+                <% if tool_call.arguments.present? %>
+                  <div class="mb-3">
+                    <h4 class="text-4 font-medium text-gray-700 mb-2">Arguments:</h4>
+                    <div class="bg-gray-50 rounded p-3">
+                      <pre class="text-4 text-gray-800 font-mono overflow-x-auto"><%= JSON.pretty_generate(JSON.parse(tool_call.arguments)) rescue tool_call.arguments %></pre>
+                    </div>
+                  </div>
+                <% end %>
+
+                <% if tool_call.result.present? %>
+                  <div>
+                    <h4 class="text-4 font-medium text-gray-700 mb-2">Result:</h4>
+                    <div class="bg-green-50 rounded p-3 border-l-4 border-green-200">
+                      <pre class="text-4 text-gray-800 font-mono overflow-x-auto"><%= tool_call.result %></pre>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="lg:col-span-1 space-y-6">
+      <!-- Message Info -->
+      <div class="card">
+        <h2 class="text-2 font-semibold text-gray-900 mb-4">Message Info</h2>
+        <dl class="space-y-3">
+          <div>
+            <dt class="text-4 font-medium text-gray-600">ID</dt>
+            <dd class="text-3 text-gray-900"><%= @message.id %></dd>
+          </div>
+          <div>
+            <dt class="text-4 font-medium text-gray-600">Role</dt>
+            <dd class="text-3 text-gray-900"><%= @message.role&.capitalize %></dd>
+          </div>
+          <div>
+            <dt class="text-4 font-medium text-gray-600">Chat</dt>
+            <dd class="text-3 text-blue-600">
+              <%= link_to "Chat ##{@message.chat.id}", chat_path(@message.chat), class: "hover:text-blue-900" %>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-4 font-medium text-gray-600">User</dt>
+            <dd class="text-3 text-gray-900"><%= @message.chat.user&.whatsapp_number || "Unknown User" %></dd>
+          </div>
+          <div>
+            <dt class="text-4 font-medium text-gray-600">Created</dt>
+            <dd class="text-3 text-gray-900"><%= @message.created_at.strftime("%b %d, %Y at %I:%M %p") %></dd>
+          </div>
+          <div>
+            <dt class="text-4 font-medium text-gray-600">Updated</dt>
+            <dd class="text-3 text-gray-900"><%= @message.updated_at.strftime("%b %d, %Y at %I:%M %p") %></dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Token Usage -->
+      <% if @message.input_tokens.present? || @message.output_tokens.present? %>
+        <div class="card">
+          <h2 class="text-2 font-semibold text-gray-900 mb-4">Token Usage</h2>
+          <dl class="space-y-3">
+            <% if @message.input_tokens.present? && @message.input_tokens > 0 %>
+              <div>
+                <dt class="text-4 font-medium text-gray-600">Input Tokens</dt>
+                <dd class="text-3 text-gray-900"><%= number_with_delimiter(@message.input_tokens) %></dd>
+              </div>
+            <% end %>
+            <% if @message.output_tokens.present? && @message.output_tokens > 0 %>
+              <div>
+                <dt class="text-4 font-medium text-gray-600">Output Tokens</dt>
+                <dd class="text-3 text-gray-900"><%= number_with_delimiter(@message.output_tokens) %></dd>
+              </div>
+            <% end %>
+            <% if @message.input_tokens.present? && @message.output_tokens.present? %>
+              <div class="border-t border-gray-200 pt-3">
+                <dt class="text-4 font-medium text-gray-600">Total Tokens</dt>
+                <dd class="text-2 font-semibold text-gray-900"><%= number_with_delimiter(@message.input_tokens + @message.output_tokens) %></dd>
+              </div>
+            <% end %>
+          </dl>
+        </div>
+      <% end %>
+
+      <!-- Related Actions -->
+      <div class="card">
+        <h2 class="text-2 font-semibold text-gray-900 mb-4">Actions</h2>
+        <div class="space-y-3">
+          <%= link_to "View Chat Conversation", chat_path(@message.chat), class: "btn btn-primary w-full text-center" %>
+          <%= link_to "View All Messages", messages_path, class: "btn btn-secondary w-full text-center" %>
+          <% if @message.tool_calls.any? %>
+            <%= link_to "View Tool Calls", tool_calls_path(message_id: @message.id), class: "btn btn-secondary w-full text-center" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,4 +1,211 @@
-<div>
-  <h1 class="font-bold text-4xl">ToolCalls#index</h1>
-  <p>Find me in app/views/tool_calls/index.html.erb</p>
+<div class="space-y-6">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-1 text-gray-900">Tool Calls</h1>
+      <p class="text-3 text-gray-600 mt-2">Monitor AI tool usage and function calls</p>
+    </div>
+    <% if params[:message_id].present? %>
+      <div class="flex items-center space-x-2">
+        <%= link_to "← Back to All Tool Calls", tool_calls_path, class: "btn btn-secondary" %>
+        <%= link_to "View Message", message_path(params[:message_id]), class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div class="card">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="ml-4">
+          <p class="text-4 font-medium text-gray-600">Total Tool Calls</p>
+          <p class="text-2 font-semibold text-gray-900"><%= @stats[:total_tool_calls] %></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </div>
+        <div class="ml-4">
+          <p class="text-4 font-medium text-gray-600">Unique Tools</p>
+          <p class="text-2 font-semibold text-gray-900"><%= @stats[:unique_tools] %></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </div>
+        <div class="ml-4">
+          <p class="text-4 font-medium text-gray-600">Recent Calls</p>
+          <p class="text-2 font-semibold text-gray-900"><%= @stats[:recent_calls] %></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </div>
+        <div class="ml-4">
+          <p class="text-4 font-medium text-gray-600">Most Used Tool</p>
+          <p class="text-2 font-semibold text-gray-900"><%= @stats[:most_used_tool] || "None" %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tool Usage Chart -->
+  <% if @tool_usage.any? %>
+    <div class="card">
+      <h2 class="text-2 font-semibold text-gray-900 mb-4">Tool Usage Analytics</h2>
+      <div class="space-y-4">
+        <% @tool_usage.each_with_index do |(tool_name, count), index| %>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <div class="w-6 h-6 bg-purple-100 rounded flex items-center justify-center">
+                <span class="text-xs font-medium text-purple-600"><%= index + 1 %></span>
+              </div>
+              <span class="text-3 font-medium text-gray-900"><%= tool_name %></span>
+            </div>
+            <div class="flex items-center space-x-3">
+              <div class="bg-gray-200 rounded-full h-2 w-32">
+                <% max_count = @tool_usage.first[1] %>
+                <% width_percentage = ((count.to_f / max_count) * 100).round %>
+                <div class="bg-purple-600 h-2 rounded-full" style="width: <%= width_percentage %>%"></div>
+              </div>
+              <span class="text-3 font-semibold text-gray-900 w-8 text-right"><%= count %></span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Tool Calls Table -->
+  <div class="card">
+    <% if @tool_calls.any? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Tool Call
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Message & Chat
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                User
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Result Status
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Created
+              </th>
+              <th scope="col" class="relative px-6 py-3">
+                <span class="sr-only">Actions</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <% @tool_calls.each do |tool_call| %>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center">
+                    <div class="flex-shrink-0 h-10 w-10">
+                      <div class="h-10 w-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <svg class="h-6 w-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="ml-4">
+                      <div class="text-3 font-semibold text-gray-900">
+                        <%= tool_call.name %>
+                      </div>
+                      <div class="text-4 text-gray-500">
+                        ID: <%= truncate(tool_call.tool_call_id, length: 15) %>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-3 text-gray-900">
+                    <%= link_to "Message ##{tool_call.message.id}", message_path(tool_call.message), class: "text-blue-600 hover:text-blue-900 font-medium" %>
+                  </div>
+                  <div class="text-4 text-gray-500">
+                    <%= link_to "Chat ##{tool_call.message.chat.id}", chat_path(tool_call.message.chat), class: "text-blue-600 hover:text-blue-900" %>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-3 text-gray-900">
+                    <%= tool_call.message.chat.user&.whatsapp_number || "Unknown User" %>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <% if tool_call.result.present? %>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                      </svg>
+                      Completed
+                    </span>
+                  <% else %>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                      <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                      </svg>
+                      No Result
+                    </span>
+                  <% end %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-3 text-gray-500">
+                  <%= time_ago_in_words(tool_call.created_at) %> ago
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-3 font-medium">
+                  <%= link_to "View Details", tool_call_path(tool_call), class: "text-blue-600 hover:text-blue-900" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <!-- Empty State -->
+      <div class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+        </svg>
+        <h3 class="text-2 text-gray-900 mt-4">No tool calls yet</h3>
+        <p class="text-3 text-gray-500 mt-2">Tool calls will appear here when the AI uses functions.</p>
+      </div>
+    <% end %>
+  </div>
 </div>

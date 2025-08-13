@@ -1,4 +1,190 @@
-<div>
-  <h1 class="font-bold text-4xl">ToolCalls#show</h1>
-  <p>Find me in app/views/tool_calls/show.html.erb</p>
+<div class="space-y-6">
+  <!-- Navigation -->
+  <div class="flex items-center space-x-2 text-3 text-gray-500">
+    <%= link_to "← Back to Tool Calls", tool_calls_path, class: "text-blue-600 hover:text-blue-900" %>
+    <span>/</span>
+    <%= link_to "Message ##{@tool_call.message.id}", message_path(@tool_call.message), class: "text-blue-600 hover:text-blue-900" %>
+    <span>/</span>
+    <span class="text-gray-900">Tool Call Details</span>
+  </div>
+
+  <!-- Tool Call Header -->
+  <div class="card">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-4">
+        <div class="flex-shrink-0">
+          <div class="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center">
+            <svg class="h-6 w-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+            </svg>
+          </div>
+        </div>
+        <div>
+          <h1 class="text-1 text-gray-900"><%= @tool_call.name %></h1>
+          <div class="flex items-center space-x-4 text-3 text-gray-600 mt-2">
+            <span>ID: <%= truncate(@tool_call.tool_call_id, length: 20) %></span>
+            <span>Created <%= time_ago_in_words(@tool_call.created_at) %> ago</span>
+            <% if @tool_call.result.present? %>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                Completed
+              </span>
+            <% else %>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                No Result
+              </span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tool Call Content -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Main Content -->
+    <div class="lg:col-span-2 space-y-6">
+      <!-- Arguments -->
+      <% if @tool_call.arguments.present? %>
+        <div class="card">
+          <h2 class="text-2 font-semibold text-gray-900 mb-4">Function Arguments</h2>
+          <div class="bg-gray-50 rounded-lg p-4 border">
+            <pre class="whitespace-pre-wrap text-3 text-gray-900 font-mono overflow-x-auto"><%= JSON.pretty_generate(JSON.parse(@tool_call.arguments)) rescue @tool_call.arguments %></pre>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Result -->
+      <% if @tool_call.result.present? %>
+        <div class="card">
+          <h2 class="text-2 font-semibold text-gray-900 mb-4">Function Result</h2>
+          <div class="bg-green-50 rounded-lg p-4 border border-green-200">
+            <pre class="whitespace-pre-wrap text-3 text-gray-900 font-mono overflow-x-auto"><%= @tool_call.result %></pre>
+          </div>
+        </div>
+      <% else %>
+        <div class="card">
+          <h2 class="text-2 font-semibold text-gray-900 mb-4">Function Result</h2>
+          <div class="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
+            <div class="flex items-center">
+              <svg class="w-5 h-5 text-yellow-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+              </svg>
+              <div>
+                <h3 class="text-3 font-medium text-yellow-800">No Result Available</h3>
+                <p class="text-3 text-yellow-700 mt-1">This tool call was initiated but no result has been recorded yet.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Raw Data -->
+      <div class="card">
+        <h2 class="text-2 font-semibold text-gray-900 mb-4">Raw Tool Call Data</h2>
+        <div class="bg-gray-50 rounded-lg p-4 border">
+          <pre class="whitespace-pre-wrap text-4 text-gray-700 font-mono overflow-x-auto"><%= JSON.pretty_generate({
+            id: @tool_call.id,
+            tool_call_id: @tool_call.tool_call_id,
+            name: @tool_call.name,
+            arguments: @tool_call.arguments.present? ? JSON.parse(@tool_call.arguments) : nil,
+            result: @tool_call.result,
+            created_at: @tool_call.created_at,
+            updated_at: @tool_call.updated_at
+          }.compact) %></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="lg:col-span-1 space-y-6">
+      <!-- Tool Call Info -->
+      <div class="card">
+        <h2 class="text-2 font-semibold text-gray-900 mb-4">Tool Call Info</h2>
+        <dl class="space-y-3">
+          <div>
+            <dt class="text-4 font-medium text-gray-600">Database ID</dt>
+            <dd class="text-3 text-gray-900"><%= @tool_call.id %></dd>
+          </div>
+          <div>
+            <dt class="text-4 font-medium text-gray-600">Tool Call ID</dt>
+            <dd class="text-3 text-gray-900 break-all"><%= @tool_call.tool_call_id %></dd>
+          </div>
+          <div>
+            <dt class="text-4 font-medium text-gray-600">Function Name</dt>
+            <dd class="text-3 text-gray-900"><%= @tool_call.name %></dd>
+          </div>
+          <div>
+            <dt class="text-4 font-medium text-gray-600">Status</dt>
+            <dd class="text-3">
+              <% if @tool_call.result.present? %>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  Completed
+                </span>
+              <% else %>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                  No Result
+                </span>
+              <% end %>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-4 font-medium text-gray-600">Created</dt>
+            <dd class="text-3 text-gray-900"><%= @tool_call.created_at.strftime("%b %d, %Y at %I:%M %p") %></dd>
+          </div>
+          <div>
+            <dt class="text-4 font-medium text-gray-600">Updated</dt>
+            <dd class="text-3 text-gray-900"><%= @tool_call.updated_at.strftime("%b %d, %Y at %I:%M %p") %></dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Context Info -->
+      <div class="card">
+        <h2 class="text-2 font-semibold text-gray-900 mb-4">Context</h2>
+        <dl class="space-y-3">
+          <div>
+            <dt class="text-4 font-medium text-gray-600">Message</dt>
+            <dd class="text-3 text-blue-600">
+              <%= link_to "Message ##{@tool_call.message.id}", message_path(@tool_call.message), class: "hover:text-blue-900" %>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-4 font-medium text-gray-600">Chat</dt>
+            <dd class="text-3 text-blue-600">
+              <%= link_to "Chat ##{@tool_call.message.chat.id}", chat_path(@tool_call.message.chat), class: "hover:text-blue-900" %>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-4 font-medium text-gray-600">User</dt>
+            <dd class="text-3 text-gray-900"><%= @tool_call.message.chat.user&.whatsapp_number || "Unknown User" %></dd>
+          </div>
+          <div>
+            <dt class="text-4 font-medium text-gray-600">Message Role</dt>
+            <dd class="text-3 text-gray-900"><%= @tool_call.message.role&.capitalize %></dd>
+          </div>
+          <div>
+            <dt class="text-4 font-medium text-gray-600">AI Model</dt>
+            <dd class="text-3 text-gray-900"><%= @tool_call.message.chat.model_id %></dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Related Actions -->
+      <div class="card">
+        <h2 class="text-2 font-semibold text-gray-900 mb-4">Actions</h2>
+        <div class="space-y-3">
+          <%= link_to "View Message", message_path(@tool_call.message), class: "btn btn-primary w-full text-center" %>
+          <%= link_to "View Chat Conversation", chat_path(@tool_call.message.chat), class: "btn btn-primary w-full text-center" %>
+          <%= link_to "View All Tool Calls", tool_calls_path, class: "btn btn-secondary w-full text-center" %>
+          <%= link_to "View Tool Calls for Message", tool_calls_path(message_id: @tool_call.message.id), class: "btn btn-secondary w-full text-center" %>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

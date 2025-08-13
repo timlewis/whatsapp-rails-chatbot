@@ -14,12 +14,12 @@ class ChatsController < ApplicationController
   end
 
   def show
-    @messages = @chat.messages.order(:created_at)
-    @message_stats = {
-      total_messages: @messages.count,
+    @messages = @chat.messages.includes(:tool_calls).order(:created_at)
+    @stats = {
       user_messages: @messages.where(role: 'user').count,
       assistant_messages: @messages.where(role: 'assistant').count,
-      tool_calls: @chat.tool_calls.count
+      tool_calls: @chat.tool_calls.count,
+      total_tokens: @messages.sum('COALESCE(input_tokens, 0) + COALESCE(output_tokens, 0)')
     }
   end
 
