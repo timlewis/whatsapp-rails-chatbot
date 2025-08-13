@@ -2,6 +2,10 @@ Rails.application.routes.draw do
   # Authentication routes
   resource :session
   resources :passwords, param: :token
+  
+  # Authenticated user password change
+  get 'account/password', to: 'passwords#edit_current'
+  patch 'account/password', to: 'passwords#update_current'
 
   # Admin routes
   root "dashboard#index"

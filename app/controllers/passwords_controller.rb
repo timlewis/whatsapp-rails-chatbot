@@ -1,5 +1,5 @@
 class PasswordsController < ApplicationController
-  allow_unauthenticated_access
+  allow_unauthenticated_access only: %i[ new create edit update ]
   before_action :set_admin_user_by_token, only: %i[ edit update ]
 
   def new
@@ -21,6 +21,21 @@ class PasswordsController < ApplicationController
       redirect_to new_session_path, notice: "Password has been reset."
     else
       redirect_to edit_password_path(params[:token]), alert: "Passwords did not match."
+    end
+  end
+
+  # Authenticated user password change actions
+  def edit_current
+    @admin_user = Current.admin_user
+  end
+
+  def update_current
+    @admin_user = Current.admin_user
+    
+    if @admin_user.update(params.permit(:password, :password_confirmation))
+      redirect_to root_path, notice: "Password updated successfully."
+    else
+      render :edit_current, status: :unprocessable_entity
     end
   end
 
