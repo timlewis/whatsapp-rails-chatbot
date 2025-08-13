@@ -1,0 +1,177 @@
+<div class="space-y-8">
+  <!-- Page Header -->
+  <div>
+    <h1 class="text-1 text-gray-900">Dashboard</h1>
+    <p class="text-3 text-gray-600 mt-2">Manage your WhatsApp chatbot system</p>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+    <!-- Personas Card -->
+    <%= link_to personas_path, class: "card hover:shadow-lg transition-shadow duration-200" do %>
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-2 text-gray-900">Personas</h3>
+          <p class="text-1 text-blue-600 font-bold"><%= @stats[:personas] %></p>
+        </div>
+        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+          <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+          </svg>
+        </div>
+      </div>
+      <p class="text-4 text-gray-500 mt-2">AI personalities</p>
+    <% end %>
+
+    <!-- Users Card -->
+    <%= link_to users_path, class: "card hover:shadow-lg transition-shadow duration-200" do %>
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-2 text-gray-900">Users</h3>
+          <p class="text-1 text-green-600 font-bold"><%= @stats[:users] %></p>
+        </div>
+        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+          <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+          </svg>
+        </div>
+      </div>
+      <p class="text-4 text-gray-500 mt-2">WhatsApp users</p>
+    <% end %>
+
+    <!-- Chats Card -->
+    <%= link_to chats_path, class: "card hover:shadow-lg transition-shadow duration-200" do %>
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-2 text-gray-900">Chats</h3>
+          <p class="text-1 text-purple-600 font-bold"><%= @stats[:chats] %></p>
+        </div>
+        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+          <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+      </div>
+      <p class="text-4 text-gray-500 mt-2">Conversations</p>
+    <% end %>
+
+    <!-- Messages Card -->
+    <%= link_to messages_path, class: "card hover:shadow-lg transition-shadow duration-200" do %>
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-2 text-gray-900">Messages</h3>
+          <p class="text-1 text-yellow-600 font-bold"><%= @stats[:messages] %></p>
+        </div>
+        <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+          <svg class="w-6 h-6 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+      </div>
+      <p class="text-4 text-gray-500 mt-2">Total messages</p>
+    <% end %>
+
+    <!-- Tool Calls Card -->
+    <%= link_to tool_calls_path, class: "card hover:shadow-lg transition-shadow duration-200" do %>
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-2 text-gray-900">Tool Calls</h3>
+          <p class="text-1 text-red-600 font-bold"><%= @stats[:tool_calls] %></p>
+        </div>
+        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+          <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+      </div>
+      <p class="text-4 text-gray-500 mt-2">AI function calls</p>
+    <% end %>
+  </div>
+
+  <!-- Recent Activity Section -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Recent Chats -->
+    <div class="card">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2 text-gray-900">Recent Chats</h2>
+        <%= link_to "View All", chats_path, class: "text-4 text-blue-600 hover:text-blue-800" %>
+      </div>
+      
+      <% if @recent_chats.any? %>
+        <div class="space-y-4">
+          <% @recent_chats.each do |chat| %>
+            <div class="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0">
+              <div>
+                <p class="text-3 font-semibold text-gray-900">
+                  <%= chat.user.whatsapp_number %>
+                </p>
+                <p class="text-4 text-gray-500">
+                  Model: <%= chat.model_id %>
+                </p>
+              </div>
+              <div class="text-right">
+                <p class="text-4 text-gray-500">
+                  <%= time_ago_in_words(chat.updated_at) %> ago
+                </p>
+                <%= link_to "View", chat_path(chat), class: "text-4 text-blue-600 hover:text-blue-800" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-3 text-gray-500 text-center py-8">No chats yet</p>
+      <% end %>
+    </div>
+
+    <!-- System Status -->
+    <div class="card">
+      <h2 class="text-2 text-gray-900 mb-6">System Status</h2>
+      
+      <div class="space-y-4">
+        <!-- Default Persona Status -->
+        <div class="flex items-center justify-between py-3 border-b border-gray-100">
+          <div>
+            <p class="text-3 font-semibold text-gray-900">Default Persona</p>
+            <p class="text-4 text-gray-500">
+              <% if @default_persona %>
+                <%= @default_persona.name %>
+              <% else %>
+                Not configured
+              <% end %>
+            </p>
+          </div>
+          <div class="flex items-center">
+            <% if @default_persona %>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                Active
+              </span>
+            <% else %>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                Missing
+              </span>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="pt-4">
+          <h3 class="text-3 font-semibold text-gray-900 mb-3">Quick Actions</h3>
+          <div class="space-y-2">
+            <%= link_to new_persona_path, class: "btn btn-primary w-full justify-start" do %>
+              <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+              </svg>
+              Create New Persona
+            <% end %>
+            <%= link_to new_user_path, class: "btn btn-secondary w-full justify-start" do %>
+              <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"/>
+              </svg>
+              Add New User
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
