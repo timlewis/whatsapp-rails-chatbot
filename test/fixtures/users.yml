@@ -12,10 +12,8 @@
 #  index_users_on_whatsapp_number  (whatsapp_number) UNIQUE
 #
 
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  whatsapp_number: <%= SecureRandom.uuid %>
+  whatsapp_number: "+1234567890"
 
 two:
-  whatsapp_number: <%= SecureRandom.uuid %>
+  whatsapp_number: "+1234567891"

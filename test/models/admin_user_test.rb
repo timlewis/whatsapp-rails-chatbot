@@ -1,20 +1,21 @@
 # == Schema Information
 #
-# Table name: users
+# Table name: admin_users
 #
 #  id              :integer          not null, primary key
-#  whatsapp_number :string
+#  email_address   :string
+#  password_digest :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
 # Indexes
 #
-#  index_users_on_whatsapp_number  (whatsapp_number) UNIQUE
+#  index_admin_users_on_email_address  (email_address) UNIQUE
 #
 
 require "test_helper"
 
-class UserTest < ActiveSupport::TestCase
+class AdminUserTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

@@ -8,6 +8,15 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 #
+
+# Create default admin user
+AdminUser.find_or_create_by!(email_address: "admin@example.com") do |admin_user|
+  admin_user.password = "password123"
+  admin_user.password_confirmation = "password123"
+end
+
+puts "Created admin user: admin@example.com / password123"
+
 # This will create a default persona if one does not already exist
 Persona.find_or_create_by!(config_default: true) do |persona|
   persona.name = "WhatsApp Assistant"
