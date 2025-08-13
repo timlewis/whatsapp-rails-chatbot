@@ -103,7 +103,7 @@
             <div class="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0">
               <div>
                 <p class="text-3 font-semibold text-gray-900">
-                  <%= chat.user.whatsapp_number %>
+                  <%= chat.user&.whatsapp_number || "Unknown User" %>
                 </p>
                 <p class="text-4 text-gray-500">
                   Model: <%= chat.model_id %>

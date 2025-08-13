@@ -8,9 +8,9 @@ class DashboardController < ApplicationController
       tool_calls: ToolCall.count
     }
 
-    # Recent activity
-    @recent_chats = Chat.includes(:user).order(updated_at: :desc).limit(5)
-    @recent_messages = Message.includes(chat: :user).order(created_at: :desc).limit(10)
+    # Recent activity - only include chats that have users
+    @recent_chats = Chat.joins(:user).includes(:user).order(updated_at: :desc).limit(5)
+    @recent_messages = Message.joins(chat: :user).includes(chat: :user).order(created_at: :desc).limit(10)
     @default_persona = Persona.default.first
   end
 end
