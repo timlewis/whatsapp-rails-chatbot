@@ -1,10 +1,10 @@
 class ChatsController < ApplicationController
-  before_action :set_chat, only: [:show]
+  before_action :set_chat, only: [ :show ]
 
   def index
     @chats = Chat.joins(:user).includes(:user, :messages).order('chats.updated_at DESC')
     @chats = @chats.where(user_id: params[:user_id]) if params[:user_id].present?
-    
+
     @stats = {
       total_chats: @chats.count,
       active_today: @chats.where('chats.updated_at >= ?', 1.day.ago).count,

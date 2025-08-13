@@ -12,7 +12,7 @@
 #  index_users_on_whatsapp_number  (whatsapp_number) UNIQUE
 #
 
-require "test_helper"
+require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   # test "the truth" do
