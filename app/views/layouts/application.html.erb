@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Whatsapp Rails Chatbot" %></title>
+    <title><%= content_for(:title) || "WhatsApp Chatbot Admin" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -22,7 +22,86 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="bg-gray-50 min-h-screen">
+    <% if authenticated? %>
+      <!-- Navigation Header -->
+      <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between items-center h-16">
+            <!-- Logo/Title -->
+            <div class="flex items-center">
+              <h1 class="text-1 text-gray-900">WhatsApp Chatbot Admin</h1>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex space-x-8">
+              <%= link_to "Dashboard", root_path, class: "text-3 text-gray-700 hover:text-gray-900" %>
+              <%= link_to "Personas", personas_path, class: "text-3 text-gray-700 hover:text-gray-900" %>
+              <%= link_to "Users", users_path, class: "text-3 text-gray-700 hover:text-gray-900" %>
+              <%= link_to "Chats", chats_path, class: "text-3 text-gray-700 hover:text-gray-900" %>
+              <%= link_to "Messages", messages_path, class: "text-3 text-gray-700 hover:text-gray-900" %>
+              <%= link_to "Tool Calls", tool_calls_path, class: "text-3 text-gray-700 hover:text-gray-900" %>
+            </nav>
+
+            <!-- User Menu -->
+            <div class="flex items-center space-x-4">
+              <span class="text-4 text-gray-600">
+                <%= Current.admin_user&.email_address %>
+              </span>
+              <%= link_to "Logout", session_path, 
+                  method: :delete, 
+                  class: "btn btn-secondary", 
+                  data: { confirm: "Are you sure?" } %>
+            </div>
+          </div>
+
+          <!-- Mobile Navigation -->
+          <div class="md:hidden">
+            <nav class="space-y-1 py-4">
+              <%= link_to "Dashboard", root_path, class: "block text-3 text-gray-700 hover:text-gray-900 py-2" %>
+              <%= link_to "Personas", personas_path, class: "block text-3 text-gray-700 hover:text-gray-900 py-2" %>
+              <%= link_to "Users", users_path, class: "block text-3 text-gray-700 hover:text-gray-900 py-2" %>
+              <%= link_to "Chats", chats_path, class: "block text-3 text-gray-700 hover:text-gray-900 py-2" %>
+              <%= link_to "Messages", messages_path, class: "block text-3 text-gray-700 hover:text-gray-900 py-2" %>
+              <%= link_to "Tool Calls", tool_calls_path, class: "block text-3 text-gray-700 hover:text-gray-900 py-2" %>
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Flash Messages -->
+        <% flash.each do |type, message| %>
+          <div class="<%= flash_class_for(type) %> p-4 rounded-md mb-6">
+            <p class="text-4"><%= message %></p>
+          </div>
+        <% end %>
+
+        <%= yield %>
+      </main>
+    <% else %>
+      <!-- Unauthenticated Layout -->
+      <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div class="sm:mx-auto sm:w-full sm:max-w-md">
+          <h2 class="text-1 text-center text-gray-900 mb-8">
+            WhatsApp Chatbot Admin
+          </h2>
+        </div>
+
+        <div class="sm:mx-auto sm:w-full sm:max-w-md">
+          <div class="card">
+            <!-- Flash Messages for Login -->
+            <% flash.each do |type, message| %>
+              <div class="<%= flash_class_for(type) %> p-4 rounded-md mb-6">
+                <p class="text-4"><%= message %></p>
+              </div>
+            <% end %>
+
+            <%= yield %>
+          </div>
+        </div>
+      </div>
+    <% end %>
   </body>
 </html>
