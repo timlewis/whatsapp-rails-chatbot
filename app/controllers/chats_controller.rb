@@ -18,7 +18,7 @@ class ChatsController < ApplicationController
     @stats = {
       user_messages: @messages.where(role: 'user').count,
       assistant_messages: @messages.where(role: 'assistant').count,
-      tool_calls: @chat.tool_calls.count,
+      tool_calls: ToolCall.joins(:message).where(messages: { chat_id: @chat.id }).count,
       total_tokens: @messages.sum('COALESCE(input_tokens, 0) + COALESCE(output_tokens, 0)')
     }
   end
@@ -26,6 +26,6 @@ class ChatsController < ApplicationController
   private
 
   def set_chat
-    @chat = Chat.joins(:user).includes(:user, :messages, :tool_calls).find(params[:id])
+    @chat = Chat.joins(:user).includes(:user, :messages).find(params[:id])
   end
 end
