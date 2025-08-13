@@ -2,7 +2,7 @@ class MessagesController < ApplicationController
   before_action :set_message, only: [:show]
 
   def index
-    @messages = Message.joins(chat: :user).includes(chat: :user, :tool_calls).order(created_at: :desc)
+    @messages = Message.joins(chat: :user).includes(chat: :user, :tool_calls).order('messages.created_at DESC')
     @messages = @messages.where(chat_id: params[:chat_id]) if params[:chat_id].present?
     
     @stats = {
@@ -15,7 +15,7 @@ class MessagesController < ApplicationController
   end
 
   def show
-    @tool_calls = @message.tool_calls.order(:created_at)
+    @tool_calls = @message.tool_calls.order('tool_calls.created_at ASC')
   end
 
   private
