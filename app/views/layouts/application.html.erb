@@ -49,9 +49,11 @@
                 <%= Current.admin_user&.email_address %>
               </span>
               <%= link_to "Logout", session_path, 
-                  method: :delete, 
-                  class: "btn btn-secondary", 
-                  data: { confirm: "Are you sure?" } %>
+                  data: { 
+                    "turbo-method": "delete",
+                    confirm: "Are you sure?" 
+                  }, 
+                  class: "btn btn-secondary" %>
             </div>
           </div>
 
