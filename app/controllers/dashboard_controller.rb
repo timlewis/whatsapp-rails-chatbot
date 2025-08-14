@@ -5,7 +5,8 @@ class DashboardController < ApplicationController
       users: User.count,
       chats: Chat.count,
       messages: Message.count,
-      tool_calls: ToolCall.count
+      tool_calls: ToolCall.count,
+      admin_users: AdminUser.count
     }
 
     # Recent activity - only include chats that have users
