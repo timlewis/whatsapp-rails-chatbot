@@ -16,7 +16,28 @@
 require 'test_helper'
 
 class AdminUserTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test 'should return last logged in time from most recent session' do
+    admin_user = admin_users(:one)
+    admin_user.sessions.destroy_all
+
+    # Create sessions with different timestamps
+    first_time = 2.days.ago
+    second_time = 1.day.ago
+
+    first_session = admin_user.sessions.create!(user_agent: 'First', ip_address: '127.0.0.1')
+    first_session.update_column(:created_at, first_time)
+
+    second_session = admin_user.sessions.create!(user_agent: 'Second', ip_address: '127.0.0.1')
+    second_session.update_column(:created_at, second_time)
+
+    admin_user.reload
+    assert_equal second_session.created_at.to_i, admin_user.last_logged_in_at.to_i
+  end
+
+  test 'should return nil when admin user has no sessions' do
+    admin_user = admin_users(:one)
+    admin_user.sessions.destroy_all
+
+    assert_nil admin_user.last_logged_in_at
+  end
 end

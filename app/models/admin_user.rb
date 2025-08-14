@@ -19,4 +19,8 @@ class AdminUser < ApplicationRecord
 
   validates :email_address, presence: true, uniqueness: true
   normalizes :email_address, with: ->(e) { e.strip.downcase }
+
+  def last_logged_in_at
+    sessions.order(:created_at).last&.created_at
+  end
 end
