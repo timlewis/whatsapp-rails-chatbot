@@ -1,8 +1,13 @@
 require 'test_helper'
 
 class DashboardControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    @admin_user = admin_users(:one)
+    sign_in_as(@admin_user)
+  end
+
   test 'should get index' do
-    get dashboard_index_url
+    get root_url
     assert_response :success
   end
 end
