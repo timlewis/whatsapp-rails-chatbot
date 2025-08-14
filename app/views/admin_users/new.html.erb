@@ -1,0 +1,65 @@
+<div class="space-y-8">
+  <!-- Page Header -->
+  <div>
+    <h1 class="text-1 text-gray-900">Create Admin User</h1>
+    <p class="text-3 text-gray-600 mt-2">Add a new administrator account</p>
+  </div>
+
+  <!-- Form Card -->
+  <div class="card max-w-md">
+    <%= form_with model: @admin_user, local: true, class: "space-y-6" do |form| %>
+      <% if @admin_user.errors.any? %>
+        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <h3 class="text-3 text-red-800 font-semibold">
+                <%= pluralize(@admin_user.errors.count, "error") %> prohibited this admin user from being saved:
+              </h3>
+              <ul class="mt-2 text-4 text-red-700 list-disc list-inside">
+                <% @admin_user.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <div>
+        <%= form.label :email_address, class: "block text-3 font-semibold text-gray-700" %>
+        <%= form.email_field :email_address, 
+            class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg text-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
+            placeholder: "admin@example.com",
+            required: true %>
+      </div>
+
+      <div>
+        <%= form.label :password, class: "block text-3 font-semibold text-gray-700" %>
+        <%= form.password_field :password, 
+            class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg text-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
+            placeholder: "Password",
+            required: true %>
+      </div>
+
+      <div>
+        <%= form.label :password_confirmation, "Confirm Password", class: "block text-3 font-semibold text-gray-700" %>
+        <%= form.password_field :password_confirmation, 
+            class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg text-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
+            placeholder: "Confirm Password",
+            required: true %>
+      </div>
+
+      <div class="flex items-center justify-between pt-4">
+        <%= link_to admin_users_path, class: "btn btn-secondary" do %>
+          Cancel
+        <% end %>
+        <%= form.submit "Create Admin User", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

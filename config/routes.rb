@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   # Full CRUD controllers
   resources :personas
   resources :users
+  resources :admin_users, except: [:show, :edit, :update]
   
   # Read-only controllers
   resources :chats, only: [:index, :show]
