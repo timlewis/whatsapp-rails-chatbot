@@ -79,3 +79,9 @@ gem "acidic_job", "1.0.0.rc6"
 
 # Mission Control for visualizing background jobs
 gem "mission_control-jobs"
+
+gem "dockerfile-rails", ">= 1.7", group: :development
+
+gem "litestream", "~> 0.14.0"
+
+gem "aws-sdk-s3", "~> 1.196", require: false
