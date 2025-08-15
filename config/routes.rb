@@ -32,4 +32,7 @@ Rails.application.routes.draw do
 
   # WhatsApp webhook
   post '/webhook', to: 'webhooks#receive'
+
+  # Mission Control Jobs dashboard
+  mount MissionControl::Jobs::Engine, at: "/jobs"
 end

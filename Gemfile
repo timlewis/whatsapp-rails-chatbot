@@ -76,3 +76,6 @@ group :test do
 end
 
 gem "acidic_job", "1.0.0.rc6"
+
+# Mission Control for visualizing background jobs
+gem "mission_control-jobs"
