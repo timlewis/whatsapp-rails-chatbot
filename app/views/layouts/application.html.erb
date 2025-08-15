@@ -42,7 +42,22 @@
               <%= link_to "Chats", chats_path, class: "text-3 text-gray-700 hover:text-gray-900" %>
               <%= link_to "Messages", messages_path, class: "text-3 text-gray-700 hover:text-gray-900" %>
               <%= link_to "Tool Calls", tool_calls_path, class: "text-3 text-gray-700 hover:text-gray-900" %>
-              <%= link_to "Admin Users", admin_users_path, class: "text-3 text-gray-700 hover:text-gray-900" %>
+              
+              <!-- Admin Dropdown -->
+              <div class="relative">
+                <button type="button" class="flex items-center text-3 text-gray-700 hover:text-gray-900 focus:outline-none focus:text-gray-900" id="admin-menu-button" onclick="toggleAdminMenu()">
+                  <span>Admin</span>
+                  <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                  </svg>
+                </button>
+                
+                <!-- Admin Dropdown Menu -->
+                <div id="admin-menu" class="hidden absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+                  <%= link_to "Admin Users", admin_users_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+                  <%= link_to "Background Jobs", "/jobs", class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+                </div>
+              </div>
             </nav>
 
             <!-- User Menu -->
@@ -78,6 +93,7 @@
               <%= link_to "Messages", messages_path, class: "block text-3 text-gray-700 hover:text-gray-900 py-2" %>
               <%= link_to "Tool Calls", tool_calls_path, class: "block text-3 text-gray-700 hover:text-gray-900 py-2" %>
               <%= link_to "Admin Users", admin_users_path, class: "block text-3 text-gray-700 hover:text-gray-900 py-2" %>
+              <%= link_to "Background Jobs", "/jobs", class: "block text-3 text-gray-700 hover:text-gray-900 py-2" %>
             </nav>
           </div>
         </div>
@@ -116,16 +132,44 @@
       // User dropdown menu functionality
       function toggleUserMenu() {
         const menu = document.getElementById('user-menu');
+        const adminMenu = document.getElementById('admin-menu');
+        
+        // Close admin menu if it's open
+        if (adminMenu && !adminMenu.classList.contains('hidden')) {
+          adminMenu.classList.add('hidden');
+        }
+        
         menu.classList.toggle('hidden');
       }
 
-      // Close dropdown when clicking outside
-      document.addEventListener('click', function(event) {
-        const menu = document.getElementById('user-menu');
-        const button = document.getElementById('user-menu-button');
+      // Admin dropdown menu functionality
+      function toggleAdminMenu() {
+        const menu = document.getElementById('admin-menu');
+        const userMenu = document.getElementById('user-menu');
         
-        if (menu && button && !button.contains(event.target) && !menu.contains(event.target)) {
-          menu.classList.add('hidden');
+        // Close user menu if it's open
+        if (userMenu && !userMenu.classList.contains('hidden')) {
+          userMenu.classList.add('hidden');
+        }
+        
+        menu.classList.toggle('hidden');
+      }
+
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', function(event) {
+        const userMenu = document.getElementById('user-menu');
+        const userButton = document.getElementById('user-menu-button');
+        const adminMenu = document.getElementById('admin-menu');
+        const adminButton = document.getElementById('admin-menu-button');
+        
+        // Close user menu if clicking outside
+        if (userMenu && userButton && !userButton.contains(event.target) && !userMenu.contains(event.target)) {
+          userMenu.classList.add('hidden');
+        }
+        
+        // Close admin menu if clicking outside
+        if (adminMenu && adminButton && !adminButton.contains(event.target) && !adminMenu.contains(event.target)) {
+          adminMenu.classList.add('hidden');
         }
       });
     </script>
