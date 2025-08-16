@@ -13,6 +13,9 @@ console_command = '/rails/bin/rails console'
   DATABASE_URL = 'sqlite3:///data/production.sqlite3'
   PORT = '8080'
   SOLID_QUEUE_IN_PUMA = 'true'
+  
+[processes]
+  app = './bin/rake litestream:run ./bin/rails server'
 
 [[mounts]]
   source = 'data'
@@ -34,7 +37,7 @@ console_command = '/rails/bin/rails console'
     timeout = '2s'
     grace_period = '5s'
     method = 'GET'
-    path = "I, [2025-08-15T16:48:24.778425 #99215]  INFO -- RubyLLM: Fetching models from providers: \nI, [2025-08-15T16:48:24.778490 #99215]  INFO -- RubyLLM: Fetching models from Parsera API...\n/up"
+    path = '/up'
     protocol = 'http'
     tls_skip_verify = false
 
