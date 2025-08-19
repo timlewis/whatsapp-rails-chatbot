@@ -195,6 +195,7 @@ After deploying your Rails application:
    heroku config:set OPENAI_API_KEY=your_key
    heroku config:set ANTHROPIC_API_KEY=your_key  
    heroku config:set GEMINI_API_KEY=your_key
+   heroku config:set SOLID_QUEUE_IN_PUMA=true
    ```
 
 2. **Deploy**
@@ -244,11 +245,17 @@ After deploying your Rails application:
 3. **Deploy**
    ```bash
    fly deploy
-   
-   # Run migrations
-   fly ssh console --pty --command="bin/rails db:migrate"
-   fly ssh console --pty --command="bin/rails db:seed"
    ```
+
+4. **Setup Continous Deployment via Github actions**
+   ```bash
+   fly tokens create deploy -x 999999h
+   ```
+   * Copy the output, including the FlyV1 and space at the beginning. 
+
+   * Go to your newly-created repository on GitHub and select Settings --> Secrets and Variables --> Actions
+
+   * Create a new repository secret called FLY_API_TOKEN with the value of the token from the fly tokens create command.
 
 ### Kamal Deployment (VPS)
 
