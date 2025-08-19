@@ -75,7 +75,12 @@ Before installing the application, you need to set up your WhatsApp integration 
 2. **Verify Email**: Fill in your details and verify your email address
 3. **Login**: Access your account at [wasenderapi.com/dashboard](https://wasenderapi.com/dashboard)
 
-### 2. Create WhatsApp Session
+### 2. Retrieve Personal Access Token
+   - You can generate and manage your Personal Access Token from the Settings > Personal Access Token page in your Wasender dashboard.
+   1. **Copy Personal Access Token**: This becomes your `WASENDER_PERSONAL_ACCESS_TOKEN`
+   2. **Note Your Phone Number**: In E.164 format for `WASENDER_PHONE_NUMBER`
+
+### 3. Create WhatsApp Session
 
 1. **Navigate to Sessions**: In the dashboard, go to the **Sessions** tab
 2. **Create New Session**: Click on **"Create New Session"**
@@ -96,13 +101,7 @@ Before installing the application, you need to set up your WhatsApp integration 
    - Tap **"Link a Device"** and scan the QR code
    - Your session status will change to **"Connected"**
 
-### 3. Get API Credentials
-
-Once your session is connected:
-1. **Copy Session API Key**: This becomes your `WASENDER_PERSONAL_ACCESS_TOKEN`
-2. **Note Your Phone Number**: In E.164 format for `WASENDER_PHONE_NUMBER`
-
-### 4. Configure Webhooks (After Deployment)
+### 3. Configure Webhooks (After Deployment)
 
 After deploying your Rails application:
 1. Return to your WasenderApi dashboard
@@ -189,12 +188,13 @@ After deploying your Rails application:
    heroku create your-app-name
    
    # Add environment variables
-   heroku config:set WASENDER_PERSONAL_ACCESS_TOKEN=your_token
+   heroku config:set WASENDER_PERSONAL_ACCESS_TOKEN=personal-access-token-from-wasender-profile-page
    heroku config:set WASENDER_BASE_URL=https://www.wasenderapi.com/api/
    heroku config:set WASENDER_PHONE_NUMBER=+1234567890
    heroku config:set OPENAI_API_KEY=your_key
    heroku config:set ANTHROPIC_API_KEY=your_key  
    heroku config:set GEMINI_API_KEY=your_key
+   heroku config:set SOLID_QUEUE_IN_PUMA=true
    ```
 
 2. **Deploy**
@@ -230,7 +230,7 @@ After deploying your Rails application:
 2. **Set environment variables**
    ```bash
    # Set secrets (encrypted)
-   fly secrets set WASENDER_PERSONAL_ACCESS_TOKEN=your_token
+   fly secrets set WASENDER_PERSONAL_ACCESS_TOKEN=personal-access-token-from-wasender-profile-page
    fly secrets set OPENAI_API_KEY=your_key
    fly secrets set ANTHROPIC_API_KEY=your_key
    fly secrets set GEMINI_API_KEY=your_key
@@ -244,11 +244,17 @@ After deploying your Rails application:
 3. **Deploy**
    ```bash
    fly deploy
-   
-   # Run migrations
-   fly ssh console --pty --command="bin/rails db:migrate"
-   fly ssh console --pty --command="bin/rails db:seed"
    ```
+
+4. **Setup Continous Deployment via Github actions**
+   ```bash
+   fly tokens create deploy -x 999999h
+   ```
+   * Copy the output, including the FlyV1 and space at the beginning. 
+
+   * Go to your newly-created repository on GitHub and select Settings --> Secrets and Variables --> Actions
+
+   * Create a new repository secret called FLY_API_TOKEN with the value of the token from the fly tokens create command.
 
 ### Kamal Deployment (VPS)
 
@@ -286,7 +292,7 @@ Perfect for **Digital Ocean**, **Hetzner**, **Linode**, or any VPS provider.
    # Add your environment variables:
    KAMAL_REGISTRY_PASSWORD=your_docker_hub_token
    RAILS_MASTER_KEY=your_rails_master_key
-   WASENDER_PERSONAL_ACCESS_TOKEN=your_token
+   WASENDER_PERSONAL_ACCESS_TOKEN=personal-access-token-from-wasender-profile-page
    OPENAI_API_KEY=your_key
    ANTHROPIC_API_KEY=your_key
    GEMINI_API_KEY=your_key
