@@ -28,7 +28,7 @@ class WebhooksController < ApplicationController
   private
 
   def webhook_params
-    params.permit(:event, :timestamp, data: {})
+    params.permit(:event, :timestamp, :sessionId, data: {})
   end
 
   def valid_signature?(request)
@@ -38,9 +38,12 @@ class WebhooksController < ApplicationController
   end
 
   def handle_message_received(data)
+    # Extract the actual message data from the nested structure
+    message_data = data['messages'] || data
+
     interaction = ProcessWebhook.run(
       event: 'messages.received',
-      data: data
+      data: message_data
     )
 
     if interaction.valid?

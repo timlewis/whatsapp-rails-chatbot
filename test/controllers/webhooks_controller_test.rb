@@ -9,17 +9,36 @@ class WebhooksControllerTest < ActionDispatch::IntegrationTest
     }
     @payload = {
       event: 'messages.received',
-      timestamp: Time.now.to_i,
+      sessionId: '4d72281317b3fc4bdb3f9c64f11004d9aa6ea8d3bcd2a044be7c89a0c1ea4998',
       data: {
-        key: {
-          id: 'message-id-123',
-          fromMe: false,
-          remoteJid: '+1234567890'
-        },
-        message: {
-          conversation: 'Hello, I have a question'
+        messages: {
+          key: {
+            remoteJid: '49163676670@s.whatsapp.net',
+            fromMe: false,
+            id: '3A44875A3256AFD6B920',
+            senderLid: '12940887490729@lid'
+          },
+          messageTimestamp: 1756716993,
+          pushName: 'Tim Lewis',
+          broadcast: false,
+          message: {
+            conversation: 'Another day',
+            messageContextInfo: {
+              deviceListMetadata: {
+                senderKeyHash: 'lhafBFwzf+POaQ==',
+                senderTimestamp: '1754664910',
+                recipientKeyHash: 'SuMuOZ5vWKpNMA==',
+                recipientTimestamp: '1755526485'
+              },
+              deviceListMetadataVersion: 2,
+              messageSecret: '1AP7G0G+MWkDD4W3kH5Hq6Tt4Q83obTPIHm7lIhN8TA='
+            }
+          },
+          remoteJid: '49163676670@s.whatsapp.net',
+          id: '3A44875A3256AFD6B920'
         }
-      }
+      },
+      timestamp: 1756716993156
     }.to_json
     WasenderApi.stubs(:webhook_secret).returns(@webhook_secret)
   end
@@ -33,11 +52,11 @@ class WebhooksControllerTest < ActionDispatch::IntegrationTest
   test 'calls ProcessWebhook with correct parameters' do
     ProcessWebhook.expects(:run).with do |params|
       params[:event] == 'messages.received' &&
-      params[:data]['key']['id'] == 'message-id-123' &&
+      params[:data]['key']['id'] == '3A44875A3256AFD6B920' &&
       params[:data]['key']['fromMe'] == false &&
-      params[:data]['key']['remoteJid'] == '+1234567890' &&
-      params[:data]['message']['conversation'] == 'Hello, I have a question'
-    end.returns(stub(valid?: true, result: { user: stub(whatsapp_number: '+1234567890', id: 1) }))
+      params[:data]['key']['remoteJid'] == '49163676670@s.whatsapp.net' &&
+      params[:data]['message']['conversation'] == 'Another day'
+    end.returns(stub(valid?: true, result: { user: stub(whatsapp_number: '49163676670@s.whatsapp.net', id: 1) }))
 
     post '/webhook', params: @payload, headers: @headers
     assert_response :success
