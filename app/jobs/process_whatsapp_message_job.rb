@@ -26,9 +26,8 @@ class ProcessWhatsappMessageJob < ApplicationJob
     response = chat_record.ask(message_text)
 
     if response.present?
-      Rails.logger.info("Received LLM response (#{response.length} chars), sending reply...")
-      # Send reply via WasenderApi
-      send_whatsapp_reply(whatsapp_number, response)
+      Rails.logger.info("Received LLM response (#{response.content.length} chars), sending reply...")
+      send_whatsapp_reply(whatsapp_number, response.content)
     else
       Rails.logger.warn("LLM returned empty response for message: #{message_text}")
     end
@@ -45,16 +44,15 @@ class ProcessWhatsappMessageJob < ApplicationJob
   private
 
   def send_whatsapp_reply(whatsapp_number, message_text)
-    # Split message into chunks if it's too long for WhatsApp
     message_chunks = WasenderApi.split_message(message_text)
-
+    phone_number = extract_phone_number(whatsapp_number)
     messages_api = WasenderApi::Messages.new
 
     message_chunks.each_with_index do |chunk, index|
       next if chunk.blank?
 
       response = messages_api.send_text(
-        to: whatsapp_number,
+        to: phone_number,
         text: chunk
       )
 
@@ -68,6 +66,17 @@ class ProcessWhatsappMessageJob < ApplicationJob
         delay = rand(5.0..7.5) # Random delay between 5-7.5 seconds
         sleep(delay)
       end
+    end
+  end
+
+  def extract_phone_number(whatsapp_jid)
+    # Extract phone number from WhatsApp JID format
+    # "491626736670@s.whatsapp.net" -> "+491626736670"
+    if whatsapp_jid.include?('@')
+      phone_part = whatsapp_jid.split('@').first
+      phone_part.start_with?('+') ? phone_part : "+#{phone_part}"
+    else
+      whatsapp_jid.start_with?('+') ? whatsapp_jid : "+#{whatsapp_jid}"
     end
   end
 end
