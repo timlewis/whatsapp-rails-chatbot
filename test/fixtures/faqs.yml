@@ -1,0 +1,14 @@
+one:
+  question: "What is this chatbot for?"
+  answer: "This is a WhatsApp chatbot designed to help answer your questions using AI technology."
+  active: true
+
+two:
+  question: "How do I contact support?"
+  answer: "You can contact support by sending a message to this WhatsApp number or visiting our website."
+  active: true
+
+inactive:
+  question: "This is an inactive FAQ"
+  answer: "This FAQ is currently inactive and should not appear in responses."
+  active: false

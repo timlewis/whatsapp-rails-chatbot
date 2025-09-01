@@ -1,0 +1,124 @@
+<%= form_with model: faq, local: true, class: "space-y-6" do |form| %>
+  <% if faq.errors.any? %>
+    <div class="bg-red-50 border border-red-200 rounded-md p-4">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800">
+            <%= pluralize(faq.errors.count, "error") %> prohibited this FAQ from being saved:
+          </h3>
+          <div class="mt-2 text-sm text-red-700">
+            <ul class="list-disc pl-5 space-y-1">
+              <% faq.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- FAQ Information -->
+    <div class="card">
+      <h3 class="text-2 text-gray-900 mb-4">FAQ Details</h3>
+      
+      <div class="space-y-4">
+        <div>
+          <%= form.label :question, class: "form-label" %>
+          <%= form.text_area :question, 
+              class: "form-input", 
+              rows: 3, 
+              placeholder: "Enter the frequently asked question" %>
+          <div class="mt-1 text-4 text-gray-500">
+            Characters: <span id="question-count"><%= faq.question&.length || 0 %></span>/500
+          </div>
+        </div>
+
+        <div>
+          <%= form.label :answer, class: "form-label" %>
+          <%= form.text_area :answer, 
+              class: "form-input", 
+              rows: 5, 
+              placeholder: "Enter the detailed answer for this question" %>
+          <div class="mt-1 text-4 text-gray-500">
+            Characters: <span id="answer-count"><%= faq.answer&.length || 0 %></span>/2000
+          </div>
+        </div>
+
+        <div class="flex items-center">
+          <%= form.check_box :active, 
+              class: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" %>
+          <%= form.label :active, "Active (include in chatbot context)", 
+              class: "ml-2 text-3 text-gray-700" %>
+          <div class="ml-2">
+            <svg class="h-4 w-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20" 
+                 title="Only active FAQs will be provided as context to the AI">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preview -->
+    <div class="card">
+      <h3 class="text-2 text-gray-900 mb-4">Preview</h3>
+      <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 space-y-4">
+        <div>
+          <div class="text-3 font-semibold text-blue-600 mb-2">Question:</div>
+          <div class="text-3 text-gray-800" id="preview-question">
+            <%= faq.question.present? ? faq.question : "Question preview will appear here..." %>
+          </div>
+        </div>
+        
+        <div>
+          <div class="text-3 font-semibold text-green-600 mb-2">Answer:</div>
+          <div class="text-3 text-gray-800 whitespace-pre-wrap" id="preview-answer">
+            <%= faq.answer.present? ? faq.answer : "Answer preview will appear here..." %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="flex items-center justify-end space-x-3 pt-6 border-t border-gray-200">
+    <%= link_to "Cancel", 
+        faq.persisted? ? faq_path(faq) : faqs_path, 
+        class: "btn btn-secondary" %>
+    
+    <%= form.submit class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<script>
+  // Live preview updates
+  document.addEventListener('DOMContentLoaded', function() {
+    const questionInput = document.getElementById('faq_question');
+    const answerInput = document.getElementById('faq_answer');
+    const previewQuestion = document.getElementById('preview-question');
+    const previewAnswer = document.getElementById('preview-answer');
+    const questionCount = document.getElementById('question-count');
+    const answerCount = document.getElementById('answer-count');
+
+    if (questionInput && previewQuestion) {
+      questionInput.addEventListener('input', function() {
+        previewQuestion.textContent = this.value || 'Question preview will appear here...';
+        if (questionCount) questionCount.textContent = this.value.length;
+      });
+    }
+
+    if (answerInput && previewAnswer) {
+      answerInput.addEventListener('input', function() {
+        previewAnswer.textContent = this.value || 'Answer preview will appear here...';
+        if (answerCount) answerCount.textContent = this.value.length;
+      });
+    }
+  });
+</script>

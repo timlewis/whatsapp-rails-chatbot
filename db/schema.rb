@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_13_140911) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_01_153634) do
   create_table "acidic_job_entries", force: :cascade do |t|
     t.integer "execution_id", null: false
     t.string "step", null: false
@@ -87,6 +87,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_13_140911) do
     t.datetime "updated_at", null: false
     t.integer "user_id"
     t.index ["user_id"], name: "index_chats_on_user_id"
+  end
+
+  create_table "faqs", force: :cascade do |t|
+    t.text "question", null: false
+    t.text "answer", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["active"], name: "index_faqs_on_active"
   end
 
   create_table "messages", force: :cascade do |t|

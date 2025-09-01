@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   root "dashboard#index"
   
   # Full CRUD controllers
+  resources :faqs
   resources :personas
   resources :users
   resources :admin_users, except: [:show, :edit, :update]

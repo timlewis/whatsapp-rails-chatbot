@@ -18,8 +18,9 @@ class ProcessWhatsappMessageJob < ApplicationJob
       return
     end
 
-    # Set system instructions using the persona's base prompt
-    chat_record = chat_record.with_instructions(default_persona.base_prompt)
+    # Build system instructions combining persona and FAQ context
+    system_instructions = build_system_instructions(default_persona)
+    chat_record = chat_record.with_instructions(system_instructions)
 
     # Ask the LLM and get response
     Rails.logger.info("Querying LLM with persona: #{default_persona.name}")
@@ -42,6 +43,18 @@ class ProcessWhatsappMessageJob < ApplicationJob
   end
 
   private
+
+  def build_system_instructions(persona)
+    instructions = persona.base_prompt.dup
+
+    # Add FAQ context if any active FAQs exist
+    faq_context = Faq.context_for_llm
+    if faq_context.present?
+      instructions += "\n\nFREQUENTLY ASKED QUESTIONS AND ANSWERS:\n#{faq_context}\n\nUse these FAQs to help answer user questions when relevant."
+    end
+
+    instructions
+  end
 
   def send_whatsapp_reply(whatsapp_number, message_text)
     message_chunks = WasenderApi.split_message(message_text)

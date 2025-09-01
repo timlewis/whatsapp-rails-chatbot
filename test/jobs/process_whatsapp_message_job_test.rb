@@ -87,8 +87,22 @@ class ProcessWhatsappMessageJobTest < ActiveJob::TestCase
     ProcessWhatsappMessageJob.perform_now(@user.id, @message_text, @whatsapp_number)
   end
 
-  test 'sets system instructions using persona base_prompt' do
-    @mock_chat.expects(:with_instructions).with(@default_persona.base_prompt).returns(@mock_chat)
+  test 'sets system instructions using persona base_prompt and FAQ context' do
+    # Mock FAQ context (empty in this case since no FAQs in test)
+    Faq.stubs(:context_for_llm).returns('')
+    expected_instructions = @default_persona.base_prompt
+
+    @mock_chat.expects(:with_instructions).with(expected_instructions).returns(@mock_chat)
+
+    ProcessWhatsappMessageJob.perform_now(@user.id, @message_text, @whatsapp_number)
+  end
+
+  test 'includes FAQ context in system instructions when FAQs exist' do
+    faq_context = "Q: What is this?\nA: This is a test FAQ"
+    Faq.stubs(:context_for_llm).returns(faq_context)
+    expected_instructions = @default_persona.base_prompt + "\n\nFREQUENTLY ASKED QUESTIONS AND ANSWERS:\n#{faq_context}\n\nUse these FAQs to help answer user questions when relevant."
+
+    @mock_chat.expects(:with_instructions).with(expected_instructions).returns(@mock_chat)
 
     ProcessWhatsappMessageJob.perform_now(@user.id, @message_text, @whatsapp_number)
   end
