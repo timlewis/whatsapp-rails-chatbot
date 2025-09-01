@@ -14,7 +14,7 @@ class ChatsController < ApplicationController
   end
 
   def show
-    @messages = @chat.messages.includes(:tool_calls).order(:created_at)
+    @messages = @chat.messages.includes(:tool_calls).where.not(role: 'system').order(:created_at)
     @stats = {
       user_messages: @messages.where(role: 'user').count,
       assistant_messages: @messages.where(role: 'assistant').count,
