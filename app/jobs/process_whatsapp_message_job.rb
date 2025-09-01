@@ -63,9 +63,9 @@ class ProcessWhatsappMessageJob < ApplicationJob
         break # Stop sending if one fails
       end
 
-      # Add natural delay between chunks (except for last message)
+      # Add delay between chunks to respect WhatsApp rate limit (1 message per 5 seconds)
       if index < message_chunks.length - 1
-        delay = rand(0.5..1.5) # Random delay between 0.5-1.5 seconds
+        delay = rand(5.0..7.5) # Random delay between 5-7.5 seconds
         sleep(delay)
       end
     end
