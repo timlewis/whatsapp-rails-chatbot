@@ -9,8 +9,13 @@ class DashboardController < ApplicationController
       admin_users: AdminUser.count
     }
 
-    # Recent activity - only include chats that have users
-    @recent_chats = Chat.joins(:user).includes(:user).order(updated_at: :desc).limit(5)
+    # Recent activity - only include chats that have users and messages
+    # Order by the most recent message timestamp for each chat
+    @recent_chats = Chat.joins(:user, :messages)
+                       .includes(:user, :messages)
+                       .group('chats.id')
+                       .order('MAX(messages.created_at) DESC')
+                       .limit(5)
     @recent_messages = Message.joins(chat: :user).includes(chat: :user).order(created_at: :desc).limit(10)
     @default_persona = Persona.default.first
   end

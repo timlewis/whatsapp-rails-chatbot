@@ -127,7 +127,11 @@
               </div>
               <div class="text-right">
                 <p class="text-4 text-gray-500">
-                  <%= time_ago_in_words(chat.updated_at) %> ago
+                  <% if chat.messages.any? %>
+                    <%= time_ago_in_words(chat.messages.maximum(:created_at)) %> ago
+                  <% else %>
+                    No messages
+                  <% end %>
                 </p>
                 <%= link_to "View", chat_path(chat), class: "text-4 text-blue-600 hover:text-blue-800" %>
               </div>
