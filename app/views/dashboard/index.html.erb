@@ -172,6 +172,42 @@
             <% end %>
           </div>
         </div>
+
+        <!-- WhatsApp Session Status -->
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-3 font-semibold text-gray-900">WhatsApp Session (Wasender API)</p>
+            <p class="text-4 text-gray-500">
+              <%= case @whatsapp_status&.first
+                  when 'connected' then 'Ready to send/receive messages'
+                  when 'connecting' then 'Establishing connection...'
+                  when 'disconnected' then 'Not connected: Go to https://wasenderapi.com/ to fix'
+                  when 'need_scan' then 'QR code scan required: Go to https://wasenderapi.com/ to fix'
+                  when 'logged_out' then 'Session logged out: Go to https://wasenderapi.com/ to fix'
+                  when 'expired' then 'Session expired: Go to https://wasenderapi.com/ to fix'
+                  when 'error' then "API error occurred: #{@whatsapp_status&.last || 'unknown error'}"
+                  when 'unavailable' then "Status check failed: #{@whatsapp_status&.last || 'unknown error'}"
+                  else 'Unknown status'
+                  end %>
+            </p>
+          </div>
+          <div class="flex items-center">
+            <% case @whatsapp_status&.first %>
+            <% when 'connected' %>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                Connected
+              </span>
+            <% when 'connecting' %>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                Connecting
+              </span>
+            <% else %>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                <%= @whatsapp_status&.first&.humanize || 'Error' %>
+              </span>
+            <% end %>
+          </div>
+        </div>
       </div>
     </div>
 
