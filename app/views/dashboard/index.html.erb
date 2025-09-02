@@ -23,6 +23,38 @@
       <p class="text-4 text-gray-500 mt-2">AI personalities</p>
     <% end %>
 
+    <!-- FAQs Card -->
+    <%= link_to faqs_path, class: "card hover:shadow-lg transition-shadow duration-200" do %>
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-2 text-gray-900">FAQs</h3>
+          <p class="text-1 text-orange-600 font-bold"><%= @stats[:faqs] %></p>
+        </div>
+        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+          <svg class="w-6 h-6 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM8.94 6.94a.75.75 0 11-1.061-1.061 3 3 0 112.871 5.026v.345a.75.75 0 01-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 108.94 6.94zM10 15a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+      </div>
+      <p class="text-4 text-gray-500 mt-2">Knowledge base for better chatbot understanding.</p>
+    <% end %>
+
+    <!-- Messages Card -->
+    <%= link_to messages_path, class: "card hover:shadow-lg transition-shadow duration-200" do %>
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-2 text-gray-900">Messages</h3>
+          <p class="text-1 text-yellow-600 font-bold"><%= @stats[:messages] %></p>
+        </div>
+        <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+          <svg class="w-6 h-6 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+      </div>
+      <p class="text-4 text-gray-500 mt-2">Total messages</p>
+    <% end %>
+
     <!-- Users Card -->
     <%= link_to users_path, class: "card hover:shadow-lg transition-shadow duration-200" do %>
       <div class="flex items-center justify-between">
@@ -53,38 +85,6 @@
         </div>
       </div>
       <p class="text-4 text-gray-500 mt-2">Conversations</p>
-    <% end %>
-
-    <!-- Messages Card -->
-    <%= link_to messages_path, class: "card hover:shadow-lg transition-shadow duration-200" do %>
-      <div class="flex items-center justify-between">
-        <div>
-          <h3 class="text-2 text-gray-900">Messages</h3>
-          <p class="text-1 text-yellow-600 font-bold"><%= @stats[:messages] %></p>
-        </div>
-        <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-          <svg class="w-6 h-6 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd"/>
-          </svg>
-        </div>
-      </div>
-      <p class="text-4 text-gray-500 mt-2">Total messages</p>
-    <% end %>
-
-    <!-- Tool Calls Card -->
-    <%= link_to tool_calls_path, class: "card hover:shadow-lg transition-shadow duration-200" do %>
-      <div class="flex items-center justify-between">
-        <div>
-          <h3 class="text-2 text-gray-900">Tool Calls</h3>
-          <p class="text-1 text-red-600 font-bold"><%= @stats[:tool_calls] %></p>
-        </div>
-        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-          <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
-          </svg>
-        </div>
-      </div>
-      <p class="text-4 text-gray-500 mt-2">AI function calls</p>
     <% end %>
 
     <!-- Admin Users Card -->

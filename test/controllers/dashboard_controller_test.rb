@@ -44,7 +44,7 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     # Check that WhatsApp session status is displayed
-    assert_select 'p', text: 'WhatsApp Session'
+    assert_select 'p', text: 'WhatsApp Session (Wasender API)'
     assert_select 'span', text: 'Connected'
     assert_select 'p', text: 'Ready to send/receive messages'
   end

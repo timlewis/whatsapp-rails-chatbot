@@ -5,7 +5,7 @@ class DashboardController < ApplicationController
       users: User.count,
       chats: Chat.count,
       messages: Message.count,
-      tool_calls: ToolCall.count,
+      faqs: Faq.count,
       admin_users: AdminUser.count
     }
 
