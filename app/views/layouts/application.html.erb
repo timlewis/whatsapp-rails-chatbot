@@ -42,7 +42,6 @@
               <%= link_to "Users", users_path, class: "text-3 text-gray-700 hover:text-gray-900" %>
               <%= link_to "Chats", chats_path, class: "text-3 text-gray-700 hover:text-gray-900" %>
               <%= link_to "Messages", messages_path, class: "text-3 text-gray-700 hover:text-gray-900" %>
-              <%= link_to "Tool Calls", tool_calls_path, class: "text-3 text-gray-700 hover:text-gray-900" %>
               
               <!-- Admin Dropdown -->
               <div class="relative">
@@ -57,6 +56,7 @@
                 <div id="admin-menu" class="hidden absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
                   <%= link_to "Admin Users", admin_users_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
                   <%= link_to "Background Jobs", "/jobs", class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+                  <%= link_to "Tool Calls", tool_calls_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
                 </div>
               </div>
             </nav>
@@ -88,13 +88,14 @@
           <!-- Mobile Navigation -->
           <div class="md:hidden">
             <nav class="space-y-1 py-4">
+              <%= link_to "FAQs", faqs_path, class: "block text-3 text-gray-700 hover:text-gray-900 py-2" %>
               <%= link_to "Personas", personas_path, class: "block text-3 text-gray-700 hover:text-gray-900 py-2" %>
               <%= link_to "Users", users_path, class: "block text-3 text-gray-700 hover:text-gray-900 py-2" %>
               <%= link_to "Chats", chats_path, class: "block text-3 text-gray-700 hover:text-gray-900 py-2" %>
               <%= link_to "Messages", messages_path, class: "block text-3 text-gray-700 hover:text-gray-900 py-2" %>
-              <%= link_to "Tool Calls", tool_calls_path, class: "block text-3 text-gray-700 hover:text-gray-900 py-2" %>
               <%= link_to "Admin Users", admin_users_path, class: "block text-3 text-gray-700 hover:text-gray-900 py-2" %>
               <%= link_to "Background Jobs", "/jobs", class: "block text-3 text-gray-700 hover:text-gray-900 py-2" %>
+              <%= link_to "Tool Calls", tool_calls_path, class: "block text-3 text-gray-700 hover:text-gray-900 py-2" %>
             </nav>
           </div>
         </div>
