@@ -45,6 +45,6 @@ class PersonasController < ApplicationController
   end
 
   def persona_params
-    params.require(:persona).permit(:name, :description, :base_prompt, :config_default)
+    params.require(:persona).permit(:name, :description, :base_prompt, :config_default, :phone_number, :email)
   end
 end

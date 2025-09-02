@@ -53,6 +53,9 @@ class ProcessWhatsappMessageJob < ApplicationJob
       instructions += "\n\nFREQUENTLY ASKED QUESTIONS AND ANSWERS:\n#{faq_context}\n\nUse these FAQs to help answer user questions when relevant."
     end
 
+    # Add contact instruction based on available contact methods
+    instructions += "\n\n#{persona.contact_instruction}"
+
     instructions
   end
 

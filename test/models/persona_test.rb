@@ -9,6 +9,8 @@
 #  config_default :boolean          default("0"), not null
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
+#  phone_number   :string
+#  email          :string
 #
 # Indexes
 #
@@ -58,5 +60,44 @@ class PersonaTest < ActiveSupport::TestCase
     defaults = Persona.default
     assert_includes defaults, persona
     assert defaults.all? { |p| p.config_default }, 'All returned personas should have config_default true'
+  end
+
+  test 'should validate email format when provided' do
+    persona = personas(:one)
+    persona.email = 'invalid-email'
+    assert_not persona.valid?
+    assert_includes persona.errors[:email], 'is invalid'
+
+    persona.email = 'valid@example.com'
+    assert persona.valid?
+  end
+
+  test 'should allow blank email' do
+    persona = personas(:one)
+    persona.email = ''
+    assert persona.valid?
+  end
+
+  test 'contact_instruction returns correct message based on contact methods' do
+    persona = personas(:one)
+    # Test with no contact methods
+    persona.phone_number = nil
+    persona.email = nil
+    assert_equal "If you don't know an answer, please apologize.", persona.contact_instruction
+
+    # Test with only phone number
+    persona.phone_number = '+1234567890'
+    persona.email = nil
+    assert_equal "If you don't know an answer, please apologize and ask the customer to phone us at +1234567890.", persona.contact_instruction
+
+    # Test with only email
+    persona.phone_number = nil
+    persona.email = 'support@example.com'
+    assert_equal "If you don't know an answer, please apologize and ask the customer to send us an email at support@example.com.", persona.contact_instruction
+
+    # Test with both contact methods
+    persona.phone_number = '+1234567890'
+    persona.email = 'support@example.com'
+    assert_equal "If you don't know an answer, please apologize and ask the customer to phone us at +1234567890 or send us an email at support@example.com.", persona.contact_instruction
   end
 end

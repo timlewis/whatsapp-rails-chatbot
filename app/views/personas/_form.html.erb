@@ -42,6 +42,18 @@
               placeholder: "Brief description of this persona's purpose and personality" %>
         </div>
 
+        <div>
+          <%= form.label :phone_number, class: "form-label" %>
+          <%= form.text_field :phone_number, class: "form-input", placeholder: "e.g., +1 (555) 123-4567" %>
+          <p class="text-4 text-gray-500 mt-1">Optional: Phone number for customer support contact</p>
+        </div>
+
+        <div>
+          <%= form.label :email, class: "form-label" %>
+          <%= form.email_field :email, class: "form-input", placeholder: "e.g., support@company.com" %>
+          <p class="text-4 text-gray-500 mt-1">Optional: Email address for customer support contact</p>
+        </div>
+
         <div class="flex items-center">
           <%= form.check_box :config_default, 
               class: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" %>

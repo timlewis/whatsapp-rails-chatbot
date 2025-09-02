@@ -35,6 +35,27 @@
           <%= @persona.description %>
         </p>
 
+        <h2 class="text-2 text-gray-900 mb-4">Contact Information</h2>
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
+          <p class="text-3 text-gray-700 font-semibold">
+            This contact information will be used if the chatbot doesn't know an answer. Leave blank if you don't want the chatbot to reply with contact information.
+          </p>
+        </div>
+        <div class="space-y-3 mb-6">
+          <div class="flex items-center justify-between">
+            <span class="text-3 text-gray-600">Phone Number</span>
+            <span class="text-3 text-gray-900">
+              <%= @persona.phone_number.present? ? @persona.phone_number : "Not Set" %>
+            </span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-3 text-gray-600">Email</span>
+            <span class="text-3 text-gray-900">
+              <%= @persona.email.present? ? @persona.email : "Not Set" %>
+            </span>
+          </div>
+        </div>
+
         <h2 class="text-2 text-gray-900 mb-4">Base Prompt</h2>
         <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
           <pre class="text-3 text-gray-800 whitespace-pre-wrap font-mono"><%= @persona.base_prompt %></pre>
@@ -74,6 +95,7 @@
               <%= @persona.updated_at.strftime("%b %d, %Y") %>
             </span>
           </div>
+
         </div>
       </div>
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_01_153634) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_02_090515) do
   create_table "acidic_job_entries", force: :cascade do |t|
     t.integer "execution_id", null: false
     t.string "step", null: false
@@ -119,6 +119,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_01_153634) do
     t.boolean "config_default", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "phone_number"
+    t.string "email"
     t.index ["config_default"], name: "index_personas_on_config_default", unique: true, where: "config_default = true"
   end
 
