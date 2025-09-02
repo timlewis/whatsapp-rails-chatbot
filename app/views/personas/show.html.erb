@@ -45,13 +45,21 @@
           <div class="flex items-center justify-between">
             <span class="text-3 text-gray-600">Phone Number</span>
             <span class="text-3 text-gray-900">
-              <%= @persona.phone_number.present? ? @persona.phone_number : "Not Set" %>
+              <% if @persona.phone_number.present? %>
+                <%= @persona.phone_number %>
+              <% else %>
+                <%= link_to "Click to Set", edit_persona_path(@persona), class: "text-blue-600 hover:text-blue-800 underline" %>
+              <% end %>
             </span>
           </div>
           <div class="flex items-center justify-between">
             <span class="text-3 text-gray-600">Email</span>
             <span class="text-3 text-gray-900">
-              <%= @persona.email.present? ? @persona.email : "Not Set" %>
+              <% if @persona.email.present? %>
+                <%= @persona.email %>
+              <% else %>
+                <%= link_to "Click to Set", edit_persona_path(@persona), class: "text-blue-600 hover:text-blue-800 underline" %>
+              <% end %>
             </span>
           </div>
         </div>
