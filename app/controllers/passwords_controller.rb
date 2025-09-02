@@ -35,7 +35,7 @@ class PasswordsController < ApplicationController
     if @admin_user.update(params.permit(:password, :password_confirmation))
       redirect_to root_path, notice: 'Password updated successfully.'
     else
-      render :edit_current, status: :unprocessable_entity
+      render :edit_current, status: :unprocessable_content
     end
   end
 

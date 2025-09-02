@@ -21,7 +21,7 @@ class PersonasController < ApplicationController
     if @persona.save
       redirect_to @persona, notice: 'Persona was successfully created.'
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -29,7 +29,7 @@ class PersonasController < ApplicationController
     if @persona.update(persona_params)
       redirect_to @persona, notice: 'Persona was successfully updated.'
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

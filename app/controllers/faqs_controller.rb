@@ -21,7 +21,7 @@ class FaqsController < ApplicationController
     if @faq.save
       redirect_to @faq, notice: 'FAQ was successfully created.'
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -29,7 +29,7 @@ class FaqsController < ApplicationController
     if @faq.update(faq_params)
       redirect_to @faq, notice: 'FAQ was successfully updated.'
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
