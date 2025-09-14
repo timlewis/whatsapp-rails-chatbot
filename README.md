@@ -312,26 +312,6 @@ Perfect for **Digital Ocean**, **Hetzner**, **Linode**, or any VPS provider.
    kamal shell         # SSH into container
    ```
 
-### Digital Ocean App Platform
-
-1. **Create app from GitHub**
-   - Connect your GitHub repository
-   - Choose "Web Service" type
-   - Set build command: `bundle exec rails assets:precompile`
-   - Set run command: `bundle exec rails server -p $PORT`
-
-2. **Configure environment variables** in the App Platform dashboard:
-   ```
-   WASENDER_PERSONAL_ACCESS_TOKEN
-   WASENDER_BASE_URL
-   WASENDER_PHONE_NUMBER  
-   OPENAI_API_KEY
-   ANTHROPIC_API_KEY
-   GEMINI_API_KEY
-   RAILS_MASTER_KEY
-   RAILS_ENV=production
-   ```
-
 ## 🔧 Development
 
 ### Running Tests
